@@ -1,1 +1,57 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import './assets/variables.scss';
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+
+// Text format
+
+.regular-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: $text-black;
+}
+
+.large-header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: $text-black;
+}
+
+.small-header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: $text-black;
+}
+
+.tagline {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: $text-black;
+}
+
+// Buttons
+
+.btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: $text-black;
+    border: 2px solid $text-black;
+    border-radius: 5px;
+    padding: 12px 40px;
+    width: min-content;
+    cursor: pointer;
+}
+
+.btn-primary {
+    border-color: $btn-red;
+    color: $btn-red;
+}

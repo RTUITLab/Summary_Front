@@ -1,0 +1,43 @@
+.header {
+    display: grid;
+    grid-template-columns: 25% 60% 1fr;
+    position: fixed;
+    height: 68px;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    -webkit-box-shadow: 0px 3px 4px 0px rgba(160, 160, 160, 0.33);
+    -moz-box-shadow: 0px 3px 4px 0px rgba(160, 160, 160, 0.33);
+    box-shadow: 0px 3px 4px 0px rgba(160, 160, 160, 0.33);
+}
+
+.logo {
+    display: grid;
+    grid-column: 1;
+    margin: 11px auto 0 auto;
+    cursor: pointer;
+}
+
+.tagline {
+    margin: -11px auto 0 auto;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+}
+
+.option {
+    display: inline-block;
+    margin: auto 26px;
+    cursor: pointer;
+}
+
+.user-button {
+    display: grid;
+    vertical-align: middle;
+
+    * {
+        margin: auto 0;
+    }
+}
