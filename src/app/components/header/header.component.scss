@@ -1,3 +1,5 @@
+@import "./../../../assets/variables.scss";
+
 .header {
     display: grid;
     grid-template-columns: 25% 60% 1fr;
@@ -29,8 +31,38 @@
 
 .option {
     display: inline-block;
+    position: relative;
     margin: auto 26px;
     cursor: pointer;
+
+    &:after {
+        display: inline-block;
+        position: absolute;
+        background-color: $accent-red;
+        height: 2px;
+        width: 0;
+        bottom: -5px;
+        left: 0;
+        content: ' ';
+        transition: width 0.2s ease 0s, left 0.2s ease 0s;
+    }
+
+    &:hover:after { 
+        width: 100%;
+    }
+
+    &.active {
+        &:after {
+            display: inline-block;
+            position: absolute;
+            background-color: $accent-red;
+            height: 2px;
+            width: 100%;
+            bottom: -5px;
+            left: 0;
+            content: ' ';
+        }
+    }
 }
 
 .user-button {
