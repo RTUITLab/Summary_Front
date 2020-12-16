@@ -1,15 +1,17 @@
 <div class="header">
-    <div class="logo"> <!-- TODO: linc to main page -->
+    <div class="logo" (click)="setOption(0)" routerLink='/'>
         <div class="name large-header">Summary</div>
         <div class="tagline">Your personal assistent</div>
     </div>
     <div class="menu">
-        <div class="option">Справка</div>
-        <div class="option">Язык</div>
-        <div class="option">Расшифровка</div>
-        <div class="option"></div>
+        <div class="btn-light {{isActive(1)}}" (click)="setOption(1)">Справка</div>
+        <div class="btn-light {{isActive(2)}}" (click)="setOption(2)">Язык</div>
+        <div class="btn-light {{isActive(3)}}" (click)="setOption(3)">Расшифровка</div>
+        <div class="btn-light {{isActive(4)}}" (click)="setOption(4)">
+            <img src="../../../assets/icons/Setting.svg" alt="settings" />
+        </div>
     </div>
     <div class="user-button">
-        <div class="btn btn-primary">Войти</div>
+        <div class="btn btn-primary">Войти</div>    <!-- TODO: Different buttons-->
     </div>
 </div>
