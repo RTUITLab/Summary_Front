@@ -1,0 +1,43 @@
+@import "./../../../assets/variables.scss";
+
+.header {
+    display: grid;
+    grid-template-columns: $default-grid;
+    position: fixed;
+    background-color: #FFFFFF;
+    height: 68px;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    box-shadow: 0px 3px 4px 0px rgba(160, 160, 160, 0.33);
+    z-index: 100;
+}
+
+.logo {
+    display: grid;
+    grid-column: 1;
+    margin: 11px auto 0 auto;
+    cursor: pointer;
+}
+
+.tagline {
+    margin: -11px auto 0 auto;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+}
+
+img {
+    vertical-align: middle;
+}
+
+.user-button {
+    display: grid;
+    vertical-align: middle;
+
+    * {
+        margin: auto 0;
+    }
+}

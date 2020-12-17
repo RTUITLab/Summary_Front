@@ -1,1 +1,114 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import './assets/variables.scss';
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+
+*:focus {
+    outline: none;
+}
+
+.view {
+    display: grid;
+    grid-template-rows: 0 1fr;
+    margin-top: 68px;
+    min-height: calc(100vh - 68px - 150px);
+}
+
+// Text format
+
+.regular-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: $text-black;
+}
+
+.large-header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: $text-black;
+}
+
+.small-header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: $text-black;
+}
+
+.tagline {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: $text-black;
+}
+
+// Buttons
+
+.btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: $text-black;
+    border: 2px solid $text-black;
+    border-radius: 5px;
+    padding: 12px 40px;
+    width: fit-content;
+    cursor: pointer;
+
+    @media (max-width: 1200px) {
+        padding: 12px 25px;
+    }
+}
+
+.btn-light {
+    display: inline-block;
+    position: relative;
+    margin: auto 26px;
+    cursor: pointer;
+
+    &:after {
+        display: inline-block;
+        position: absolute;
+        background-color: $accent-red;
+        height: 2px;
+        width: 0;
+        bottom: -5px;
+        left: 0;
+        content: ' ';
+        transition: width 0.2s ease 0s, left 0.2s ease 0s;
+    }
+
+    &:hover:after { 
+        width: 100%;
+    }
+
+    &.active {
+        &:after {
+            display: inline-block;
+            position: absolute;
+            background-color: $accent-red;
+            height: 2px;
+            width: 100%;
+            bottom: -5px;
+            left: 0;
+            content: ' ';
+        }
+    }
+}
+
+.btn-primary {
+    border-color: $accent-red;
+    color: $accent-red;
+}
+
+.btn-secondary {
+    border-color: $accent-blue;
+    color: $accent-blue;
+}
