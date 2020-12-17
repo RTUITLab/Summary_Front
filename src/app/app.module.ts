@@ -7,12 +7,16 @@ import { HeaderComponent } from './components/header/header.component';
 
 import { MenuOptionsService } from './services/MenuOptions/menu-options.service';
 import { MainComponent } from './components/main/main.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { AddVideoComponent } from './components/add-video/add-video.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    MainComponent
+    MainComponent,
+    FooterComponent,
+    AddVideoComponent
   ],
   imports: [
     BrowserModule,
