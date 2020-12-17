@@ -1,0 +1,32 @@
+@import '../../../assets/variables.scss';
+
+.footer {
+    display: grid;
+    grid-template-columns: $default-grid;
+    height: 150px;
+    background-color: $gradient-blue;
+}
+
+.logo {
+    grid-column: 1;
+    margin: auto;
+}
+
+.tagline {
+    margin-top: -11px;
+    text-align: center;
+}
+
+.contacts {
+    display: flex;
+    grid-column: 2;
+    margin: auto 0;
+
+    div {
+        padding: 0 4%;
+    }
+
+    :first-child {
+        font-weight: 700;
+    }
+}
