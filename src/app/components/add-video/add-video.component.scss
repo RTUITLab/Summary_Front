@@ -1,0 +1,36 @@
+@import '../../../assets/variables.scss';
+
+.picker {
+    display: grid;
+    width: 700px;
+    margin: 50px auto;
+    grid-template-columns: auto;
+    text-align: center;
+}
+
+.card {
+    width: 320px;
+    border-radius: 9px;
+    box-shadow: 1px 4px 4px 0px rgba($color: #a0a0a0, $alpha: 0.33);
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+
+    > .btn {
+        margin: 0 auto 20px auto;
+    }
+}
+
+.red {
+    grid-column: 1;
+    background: $gradient-red;
+}
+
+.blue {
+    grid-column: 2;
+    background: $gradient-blue;
+}
+
+input[type="file"] {
+    display: none;
+}

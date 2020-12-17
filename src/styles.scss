@@ -3,6 +3,7 @@
 @import './assets/variables.scss';
 
 body {
+    margin: 0;
     font-family: 'Montserrat', sans-serif;
     font-size: 18px;
 }
@@ -12,7 +13,10 @@ body {
 }
 
 .view {
+    display: grid;
+    grid-template-rows: 0 1fr;
     margin-top: 68px;
+    min-height: calc(100vh - 68px - 150px);
 }
 
 // Text format
@@ -55,8 +59,12 @@ body {
     border: 2px solid $text-black;
     border-radius: 5px;
     padding: 12px 40px;
-    width: min-content;
+    width: fit-content;
     cursor: pointer;
+
+    @media (max-width: 1200px) {
+        padding: 12px 25px;
+    }
 }
 
 .btn-light {
@@ -98,4 +106,9 @@ body {
 .btn-primary {
     border-color: $accent-red;
     color: $accent-red;
+}
+
+.btn-secondary {
+    border-color: $accent-blue;
+    color: $accent-blue;
 }
