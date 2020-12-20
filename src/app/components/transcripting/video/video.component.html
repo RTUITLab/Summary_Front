@@ -1,0 +1,24 @@
+<video id="player">
+    <source src="{{url}}">
+</video>
+<div id="progress"></div>
+<div class="controller">
+    <label class="control" for="btnPlayPause" [style.backgroundImage]="'url(\'../../../../assets/icons/' + icon + '.svg\')'">
+    <button id="btnPlayPause" title="Play" accesskey="w" (click)="playVideo()">Play</button></label>
+    <label class="control" for="prevPeriod">
+    <button id="prevPeriod" title="PreviousPeriod" (click)="playVideo()">PreviousPeriod</button></label>
+    <label class="control" for="nextPeriod">
+    <button id="nextPeriod" title="NextPeriod" (click)="playVideo()">NextPeriod</button></label>
+    <label class="control" for="slowlier">
+    <button id="slowlier" title="Slowlier" (click)="slowlier()">Slowlier</button></label>
+    <label class="control" for="faster">
+    <button id="faster" title="Faster" (click)="faster()">Faster</button></label>
+    <label class="control" for="again">
+    <button id="again" title="Again" (click)="again()">Again</button></label>
+    <!--<progress class="progress-bar" min="0" max="100" value="0"></progress>-->
+</div>
+
+<div class="info">
+    <div id="period">Периоды</div>
+    <div id="sign">Отметки</div>
+</div>

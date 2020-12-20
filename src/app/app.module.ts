@@ -9,6 +9,10 @@ import { MenuOptionsService } from './services/MenuOptions/menu-options.service'
 import { MainComponent } from './components/main/main.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AddVideoComponent } from './components/add-video/add-video.component';
+import { TranscriptingComponent } from './components/transcripting/transcripting.component';
+import { VideoComponent } from './components/transcripting/video/video.component';
+import { EditorComponent } from './components/transcripting/editor/editor.component';
+import { MediaService } from './services/Media/media.service';
 
 @NgModule({
   declarations: [
@@ -16,14 +20,18 @@ import { AddVideoComponent } from './components/add-video/add-video.component';
     HeaderComponent,
     MainComponent,
     FooterComponent,
-    AddVideoComponent
+    AddVideoComponent,
+    TranscriptingComponent,
+    VideoComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
   providers: [
-    MenuOptionsService
+    MenuOptionsService,
+    MediaService
   ],
   bootstrap: [AppComponent]
 })

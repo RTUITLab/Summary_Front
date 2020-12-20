@@ -1,0 +1,60 @@
+@import '../../../../assets/variables.scss';
+
+* {
+    width: 100%;
+}
+
+#progress {
+    width: 0;
+    height: 10px;
+    position: relative;
+    top: -14px;
+    background-color: $accent-blue;
+}
+
+.controller {
+    text-align: center;
+}
+
+.control {
+    content: ' ';
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    transition: .3s ease;
+    cursor: pointer;
+
+    > button {
+        display: none;
+    }
+
+    &[for="prevPeriod"] {
+        background-image: url('../../../../assets/icons/SkipBack.svg');
+    }
+
+    &[for="nextPeriod"] {
+        background-image: url('../../../../assets/icons/SkipForward.svg');
+    }
+
+    &[for="slowlier"] {
+        background-image: url('../../../../assets/icons/RewindCircle.svg');
+    }
+
+    &[for="faster"] {
+        background-image: url('../../../../assets/icons/FastForwardCircle.svg');
+    }
+
+    &[for="again"] {
+        background-image: url('../../../../assets/icons/ArrowCounterClockwise.svg');
+    }
+}
+
+.info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    #period, #sign {
+        font-weight: 700;
+        text-align: center;
+    }
+}

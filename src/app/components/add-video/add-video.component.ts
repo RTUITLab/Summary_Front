@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { MediaService, MediaType } from 'src/app/services/Media/media.service';
 import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/menu-options.service';
 
 @Component({
@@ -11,12 +13,21 @@ export class AddVideoComponent implements OnInit {
 
   constructor(
     private titleService: Title,
-    private menuService: MenuOptionsService
+    private menuService: MenuOptionsService,
+    private router: Router,
+    private mediaService: MediaService
   ) { }
 
   ngOnInit(): void {
     this.menuService.setOption(MenuOptions.Transcript);
     this.titleService.setTitle('Загрузить видео');
+
+    let videoInput = <HTMLInputElement>document.getElementById('video');
+    videoInput.addEventListener('change', () => {
+      this.mediaService.mediaType = MediaType.LocalFile;
+      this.mediaService.url = URL.createObjectURL(videoInput.files[0]);
+      this.router.navigate(['/transcript']);
+    })
   }
 
 }
