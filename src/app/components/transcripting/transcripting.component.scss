@@ -1,0 +1,23 @@
+@import '../../../assets/variables.scss';
+
+.main-container {
+    display: grid;
+    grid-template-columns: $default-grid;
+    width: 100vw;
+}
+
+.video {
+    display: grid;
+    grid-column: 0;
+    height: calc(100vh - 68px - 150px);
+    background: rgba($color: $gradient-red, $alpha: 0.3);
+
+    > app-video {
+        margin: auto 20px;
+    }
+}
+
+.editor {
+    height: calc(100vh - 68px - 150px - 40px);
+    margin: 20px;
+}
