@@ -22,16 +22,16 @@ export class VideoComponent implements OnInit {
   constructor(private mediaService: MediaService) { }
 
   ngOnInit(): void {
+    this.player = <HTMLVideoElement>document.getElementById('player');
+
     if (this.mediaService.url) {
       if (this.mediaService.mediaType === MediaType.LocalFile) {
-        
-        this.url = 'https://www.w3schools.com/html/mov_bbb.mp4';
+        this.player.src = this.mediaService.url;
       }
     } else {
-      this.url = 'https://www.w3schools.com/html/mov_bbb.mp4';
+      this.player.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
     }
 
-    this.player = <HTMLVideoElement>document.getElementById('player');
     this.progress = <HTMLDivElement>document.getElementById('progress');
     this.btnPlayPause = document.getElementById('btnPlayPause');
     this.progressBar = document.getElementById('player');
