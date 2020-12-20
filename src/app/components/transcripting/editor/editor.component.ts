@@ -29,7 +29,6 @@ export class EditorComponent implements OnInit {
           mywindow.focus(); // necessary for IE >= 10*/
 
           mywindow.print();
-          mywindow.close();
           return;
         }
         document.execCommand(btn.dataset['command'], false, null);
