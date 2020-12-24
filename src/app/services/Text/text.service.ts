@@ -44,13 +44,13 @@ export class TextService {
     return this.text.map((T, i, Ts) => {
       return `
         <div data-container style="${styles.container}">
-          <div data-cell contenteditable="true" style="${styles.time}">
-            ${this.convertTimeToSeconds(T.time)} ${this.convertTimeToSeconds(Ts[i + 1] ? Ts[i + 1].time : this.duration)}
+          <div class="time" contenteditable="true" style="${styles.time}">
+            ${this.convertSecondsToTime(T.time)} ${this.convertSecondsToTime(Ts[i + 1] ? Ts[i + 1].time : this.duration)}
           </div>
-          <div data-cell contenteditable="true" style="${styles.header}">
+          <div class="author" contenteditable="true" style="${styles.header}">
             ${T.author}
           </div>
-          <div data-cell contenteditable="true" style="${styles.text}">
+          <div class="text" contenteditable="true" style="${styles.text}">
             ${T.text}
           </div>
         </div>
@@ -58,7 +58,34 @@ export class TextService {
     }).join('');
   }
 
-  private convertTimeToSeconds(seconds: number): string {
+  public convertTextToModel(times: HTMLCollectionOf<Element>, authors: HTMLCollectionOf<Element>, texts: HTMLCollectionOf<Element>): Array<TextModel> {
+    let text: Array<TextModel> = [];
+
+    for (let i = 0; i < times.length; i++) {
+      if (times.item(i).innerHTML.split(' ').find(T => T.length > 5)) {
+        text.push({
+          time: this.convertTimeToSeconds(times.item(i).innerHTML),
+          author: authors.item(i).innerHTML,
+          text: texts.item(i).innerHTML
+        });
+      }
+    }
+
+    text = text.sort((a, b) => a.time - b.time);
+
+    this.text = text;
+
+    return text;
+  }
+
+  private convertTimeToSeconds(time: string): number {
+    let splitedTime = time.split(' ').find(T => T.length > 5).split(':');
+
+    let seconds: number = parseInt(splitedTime[0]) * 3600 + parseInt(splitedTime[1]) * 60 + parseInt(splitedTime[2]);
+    return seconds;
+  }
+
+  private convertSecondsToTime(seconds: number): string {
     let time: string = '';
 
     let hours: number = Math.floor(seconds / 3600);
@@ -66,7 +93,8 @@ export class TextService {
       time += '0';
     }
     time += hours + ':';
-    seconds = seconds % 60;
+    seconds = seconds % 3600;
+    console.log(seconds);
 
     let minutes: number = Math.floor(seconds / 60);
     if (minutes <= 9) {
@@ -81,6 +109,17 @@ export class TextService {
     time += seconds;
 
     return time
+  }
+
+  public addPoint() {
+    this.text.unshift({
+      time: 0,
+      author: '',
+      text: ''
+    });
+
+    let e = new Event('loadtext');
+    (<HTMLIFrameElement>document.getElementsByTagName('iframe').item(0)).contentWindow.document.body.dispatchEvent(e);
   }
 }
 

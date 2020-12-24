@@ -23,4 +23,7 @@ export class TranscriptingComponent implements OnInit {
     this.textService.loadText();
   }
 
+  public addPoint() {
+    this.textService.addPoint();
+  }
 }

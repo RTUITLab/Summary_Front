@@ -11,5 +11,6 @@ export class MediaService {
 }
 
 export enum MediaType {
-  LocalFile
+  LocalVideo,
+  LocalAudio
 }

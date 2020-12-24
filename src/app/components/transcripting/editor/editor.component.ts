@@ -36,6 +36,29 @@ export class EditorComponent implements OnInit {
           });
           this.text = this.textService.getFormatedText();
           editorBody.innerHTML = this.text;
+
+          editorBody.addEventListener('focusout', () => {
+            console.log(this.textService.convertTextToModel(
+              (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
+              (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
+              (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
+            ));
+            
+            this.text = this.textService.getFormatedText();
+            editorBody.innerHTML = this.text;
+
+            let e = new Event('loadpoints');
+            document.dispatchEvent(e);
+          });
+
+          editorBody.addEventListener('loadtext', () => {
+            console.log('eee')
+            this.text = this.textService.getFormatedText();
+            editorBody.innerHTML = this.text;
+
+            let e = new Event('loadpoints');
+            document.dispatchEvent(e);
+          })
         }
       }
     }, 100);
@@ -47,11 +70,14 @@ export class EditorComponent implements OnInit {
     mywindow.document.write('<html><head></head><body>');
     mywindow.document.write(document.getElementById('tinymce').innerHTML);
     mywindow.document.write('</body></html>');
-
+document.getElementsByClassName('s');
     mywindow.document.close(); // necessary for IE >= 10
     mywindow.focus(); // necessary for IE >= 10*/
 
     mywindow.print();
+  }
+
+  public change() {
   }
 
   public getApiKey(): string {

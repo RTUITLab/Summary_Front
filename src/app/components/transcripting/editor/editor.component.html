@@ -28,4 +28,6 @@
           bullist numlist outdent indent | removeformat | help'
     }"
     [(ngModel)]="text"
+    modelEvents="change"
+    (onChange)="change()"
 ></editor>

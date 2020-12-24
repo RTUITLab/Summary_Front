@@ -1,4 +1,5 @@
 @import '../../../assets/variables.scss';
+@import '../../../styles.scss';
 
 .main-container {
     display: grid;
@@ -18,5 +19,9 @@
 
 .editor {
     height: calc(100vh - 68px - 150px - 40px);
+    margin: 20px;
+}
+
+.control-panel {
     margin: 20px;
 }

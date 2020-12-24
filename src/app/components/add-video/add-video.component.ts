@@ -24,8 +24,15 @@ export class AddVideoComponent implements OnInit {
 
     let videoInput = <HTMLInputElement>document.getElementById('video');
     videoInput.addEventListener('change', () => {
-      this.mediaService.mediaType = MediaType.LocalFile;
+      this.mediaService.mediaType = MediaType.LocalVideo;
       this.mediaService.url = URL.createObjectURL(videoInput.files[0]);
+      this.router.navigate(['/transcript']);
+    })
+
+    let audioInput = <HTMLInputElement>document.getElementById('audio');
+    audioInput.addEventListener('change', () => {
+      this.mediaService.mediaType = MediaType.LocalAudio;
+      this.mediaService.url = URL.createObjectURL(audioInput.files[0]);
       this.router.navigate(['/transcript']);
     })
   }

@@ -31,7 +31,10 @@ export class VideoComponent implements OnInit {
     this.player = <HTMLVideoElement>document.getElementById('player');
 
     if (this.mediaService.url) {
-      if (this.mediaService.mediaType === MediaType.LocalFile) {
+      if (this.mediaService.mediaType === MediaType.LocalVideo) {
+        this.player.src = this.mediaService.url;
+      }
+      if (this.mediaService.mediaType === MediaType.LocalAudio) {
         this.player.src = this.mediaService.url;
       }
     } else {
@@ -40,7 +43,7 @@ export class VideoComponent implements OnInit {
 
     this.btnPlayPause = document.getElementById('btnPlayPause');
     this.volumeBar = document.getElementById('player');
-    //document.addEventListener('playerready', () => console.log('sdas'))
+    
     this.player.addEventListener('click', () => this.playVideo());
     this.player.addEventListener('ended', () => this.icon = 'Play');
     
@@ -53,10 +56,17 @@ export class VideoComponent implements OnInit {
       document.dispatchEvent(e);
       this.times = this.textService.getTimes();
 
-      this.progress = <HTMLDivElement>document.getElementById('progress');
+      setTimeout(() => this.progress = <HTMLDivElement>document.getElementById('progress'), 1000);
       
       this.player.addEventListener('timeupdate', () => this.progress.style.width = 100 * this.player.currentTime / this.player.duration + '%');
     });
+
+    document.addEventListener('loadpoints', () => this.times = this.textService.getTimes());
+  }
+
+  public getType() {
+    console.log(this.player)
+    return this.mediaService.mediaType;
   }
 
   public playVideo() {
