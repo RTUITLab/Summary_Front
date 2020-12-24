@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MediaService, MediaType } from 'src/app/services/Media/media.service';
+import { TextService } from 'src/app/services/Text/text.service';
 
 @Component({
   selector: 'app-video',
@@ -12,14 +13,19 @@ export class VideoComponent implements OnInit {
   private player: HTMLVideoElement;
   private progress: HTMLDivElement;
   private btnPlayPause: HTMLElement;
-  private progressBar: HTMLElement;
   private volumeBar: HTMLElement;
 
+  public canPlay = false;
   private speeds = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4];
   private currentSpeed = 3;
   icon = 'Play';
 
-  constructor(private mediaService: MediaService) { }
+  public times = [];
+
+  constructor(
+    private mediaService: MediaService,
+    private textService: TextService
+  ) { }
 
   ngOnInit(): void {
     this.player = <HTMLVideoElement>document.getElementById('player');
@@ -32,15 +38,25 @@ export class VideoComponent implements OnInit {
       this.player.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
     }
 
-    this.progress = <HTMLDivElement>document.getElementById('progress');
     this.btnPlayPause = document.getElementById('btnPlayPause');
-    this.progressBar = document.getElementById('player');
     this.volumeBar = document.getElementById('player');
-    
-    //this.progress.addEventListener('mousemove', (e) => console.log(e))
+    //document.addEventListener('playerready', () => console.log('sdas'))
     this.player.addEventListener('click', () => this.playVideo());
     this.player.addEventListener('ended', () => this.icon = 'Play');
-    this.player.addEventListener('timeupdate', () => this.progress.style.width = 100 * this.player.currentTime / this.player.duration + '%');
+    
+    this.player.addEventListener('canplay', () => {
+      this.textService.setDuration(this.player.duration);
+      this.canPlay = true;
+
+      let e = new Event('playerready', { bubbles: false } );
+
+      document.dispatchEvent(e);
+      this.times = this.textService.getTimes();
+
+      this.progress = <HTMLDivElement>document.getElementById('progress');
+      
+      this.player.addEventListener('timeupdate', () => this.progress.style.width = 100 * this.player.currentTime / this.player.duration + '%');
+    });
   }
 
   public playVideo() {
@@ -75,4 +91,7 @@ export class VideoComponent implements OnInit {
     }
   }
 
+  public getProgress(): Array<number> {
+    return this.times.map(T => T/this.player.duration);
+  }
 }

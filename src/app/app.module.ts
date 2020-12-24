@@ -13,6 +13,9 @@ import { TranscriptingComponent } from './components/transcripting/transcripting
 import { VideoComponent } from './components/transcripting/video/video.component';
 import { EditorComponent } from './components/transcripting/editor/editor.component';
 import { MediaService } from './services/Media/media.service';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { FormsModule } from '@angular/forms';
+import { TextService } from './services/Text/text.service';
 
 @NgModule({
   declarations: [
@@ -27,11 +30,14 @@ import { MediaService } from './services/Media/media.service';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    EditorModule,
+    FormsModule
   ],
   providers: [
     MenuOptionsService,
-    MediaService
+    MediaService,
+    TextService
   ],
   bootstrap: [AppComponent]
 })

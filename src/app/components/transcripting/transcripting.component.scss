@@ -10,7 +10,6 @@
     display: grid;
     grid-column: 0;
     height: calc(100vh - 68px - 150px);
-    background: rgba($color: $gradient-red, $alpha: 0.3);
 
     > app-video {
         margin: auto 20px;

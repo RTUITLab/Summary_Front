@@ -4,12 +4,33 @@
     width: 100%;
 }
 
-#progress {
-    width: 0;
-    height: 10px;
+.progress-field {
+    width: 100%;
+    height: 5px;
     position: relative;
-    top: -14px;
+    top: -5px;
+    background-color: $gradient-blue;
+}
+
+#progress {
+    height: 100%;
+    width: 0;
     background-color: $accent-blue;
+}
+
+.point {
+    position: absolute;
+    height: 9px;
+    width: 9px;
+    background-color: $point-blue;
+    border-radius: 50px;
+    margin-top: -2px;
+    margin-left: -3px;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0px 0px 2px 1px #22222266;
+    }
 }
 
 .controller {

@@ -1,6 +1,14 @@
 <video id="player">
 </video>
-<div id="progress"></div>
+<div class="progress-field" *ngIf="canPlay">
+    <div
+        *ngFor="let point of getProgress(); let i = index"
+        class="point"
+        style="margin-left: calc(100% * {{point}} - 4.5px);"
+        (click)="player.currentTime = times[i]"
+    ></div>
+    <div id="progress"></div>
+</div>
 <div class="controller">
     <label class="control" for="btnPlayPause" [style.backgroundImage]="'url(\'../../../../assets/icons/' + icon + '.svg\')'">
     <button id="btnPlayPause" title="Play" accesskey="w" (click)="playVideo()">Play</button></label>

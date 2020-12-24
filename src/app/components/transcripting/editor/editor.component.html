@@ -1,4 +1,4 @@
-<div class="control">
+<!-- <div class="control">
     <div class="control-btn" data-command="bold"><img src="../../../../assets/icons/TextBolder.svg" alt="bold"></div>
     <div class="control-btn" data-command="italic"><img src="../../../../assets/icons/TextItalic.svg" alt="italic"></div>
     <div class="control-btn" data-command="underline"><img src="../../../../assets/icons/TextUnderline.svg" alt="underline"></div>
@@ -10,4 +10,22 @@
     <div class="control-btn" data-command="insertOrderedList"><img src="../../../../assets/icons/ListNumbers.svg" alt="orderedList"></div>
     <div class="control-btn" data-command="print"><img src="../../../../assets/icons/DownloadSimple.svg" alt="orderedList"></div>
 </div>
-<div id="list" class="list" contenteditable="true"></div>
+<div id="list" class="list" contenteditable="true"></div> -->
+
+<editor
+    apiKey="{{getApiKey()}}"
+    [init]="{
+        height: getWindowHeight(),
+        menubar: 'file edit format',
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar:
+          'undo redo | formatselect | bold italic backcolor | \
+          alignleft aligncenter alignright alignjustify | \
+          bullist numlist outdent indent | removeformat | help'
+    }"
+    [(ngModel)]="text"
+></editor>
