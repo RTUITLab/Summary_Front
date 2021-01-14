@@ -37,4 +37,8 @@ export class AddVideoComponent implements OnInit {
     })
   }
 
+  loadVoice() {
+    this.mediaService.mediaType = MediaType.Voice;
+    this.router.navigate(['/transcript']);
+  }
 }

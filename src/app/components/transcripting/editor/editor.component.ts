@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class EditorComponent implements OnInit {
   text: string;
+  id: any = null;
 
   constructor(private textService: TextService) { }
 
@@ -37,27 +38,29 @@ export class EditorComponent implements OnInit {
           this.text = this.textService.getFormatedText();
           editorBody.innerHTML = this.text;
 
-          editorBody.addEventListener('focusout', () => {
-            console.log(this.textService.convertTextToModel(
-              (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
-              (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
-              (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
-            ));
-            
-            this.text = this.textService.getFormatedText();
-            editorBody.innerHTML = this.text;
-
-            let e = new Event('loadpoints');
-            document.dispatchEvent(e);
-          });
-
           editorBody.addEventListener('loadtext', () => {
-            console.log('eee')
             this.text = this.textService.getFormatedText();
             editorBody.innerHTML = this.text;
 
             let e = new Event('loadpoints');
             document.dispatchEvent(e);
+
+            if (this.id === null) {
+              console.log('null id')
+              this.id = setInterval(() => {
+                console.log(this.textService.convertTextToModel(
+                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
+                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
+                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
+                ));
+                
+                this.text = this.textService.getFormatedText();
+                editorBody.innerHTML = this.text;
+    
+                let e = new Event('loadpoints');
+                document.dispatchEvent(e);
+              }, 20000);
+            }
           })
         }
       }

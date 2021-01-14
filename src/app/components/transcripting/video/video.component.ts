@@ -29,6 +29,7 @@ export class VideoComponent implements OnInit {
 
   ngOnInit(): void {
     this.player = <HTMLVideoElement>document.getElementById('player');
+    console.log(this.player)
 
     if (this.mediaService.url) {
       if (this.mediaService.mediaType === MediaType.LocalVideo) {
@@ -65,7 +66,7 @@ export class VideoComponent implements OnInit {
   }
 
   public getType() {
-    console.log(this.player)
+    //console.log(this.player)
     return this.mediaService.mediaType;
   }
 
@@ -103,5 +104,9 @@ export class VideoComponent implements OnInit {
 
   public getProgress(): Array<number> {
     return this.times.map(T => T/this.player.duration);
+  }
+
+  public getUrl(): string {
+    return this.mediaService.url;
   }
 }

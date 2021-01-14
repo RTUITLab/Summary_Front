@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './components/root/app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -32,7 +33,8 @@ import { TextService } from './services/Text/text.service';
     BrowserModule,
     AppRoutingModule,
     EditorModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [
     MenuOptionsService,

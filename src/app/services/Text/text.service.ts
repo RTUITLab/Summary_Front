@@ -1,32 +1,46 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TextService {
-  private text: Array<TextModel> = [];
-  private duration: number
+  public text: Array<TextModel> = [];
+  public duration: number;
+  private id: string;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  public loadText(): void {
-    this.text = [
+  public async checkStatus(id: string) {
+    /*this.text = [
       {
         time: 1,
-        author: 'Dean',
+        speakerId: 'Dean',
         text: "Yeah, maybe we've found our witch doctor. All right, I'll see what I can go dig up on boomin' Granny. You go get online, check old obits, freak accidents, that sort of thing, see if she's whacked anybody before."
       },
       {
         time: 4,
-        author: 'Sam',
+        speakerId: 'Sam',
         text: 'Right',
       },
       {
         time: 6,
-        author: 'Dean',
+        speakerId: 'Dean',
         text: "Don't go surfing porn — that's not the kind of whacking I mean.",
       }
-    ]
+    ]*/
+    this.id = id;
+
+    return (await <any>this.http.get(environment.apiUrl + 'check_state?transcribe_id=' + id).toPromise()).state;
+  }
+
+  public async loadText(id: string): Promise<Array<TextModel>> {
+    this.text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
+    
+    this.text = this.text || [];
+    
+    return this.text;
   }
 
   public setDuration(_duration: number): void {
@@ -48,7 +62,7 @@ export class TextService {
             ${this.convertSecondsToTime(T.time)} ${this.convertSecondsToTime(Ts[i + 1] ? Ts[i + 1].time : this.duration)}
           </div>
           <div class="author" contenteditable="true" style="${styles.header}">
-            ${T.author}
+            ${T.speakerId}
           </div>
           <div class="text" contenteditable="true" style="${styles.text}">
             ${T.text}
@@ -65,7 +79,7 @@ export class TextService {
       if (times.item(i).innerHTML.split(' ').find(T => T.length > 5)) {
         text.push({
           time: this.convertTimeToSeconds(times.item(i).innerHTML),
-          author: authors.item(i).innerHTML,
+          speakerId: authors.item(i).innerHTML,
           text: texts.item(i).innerHTML
         });
       }
@@ -74,6 +88,8 @@ export class TextService {
     text = text.sort((a, b) => a.time - b.time);
 
     this.text = text;
+
+    this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
 
     return text;
   }
@@ -110,54 +126,61 @@ export class TextService {
 
     return time
   }
-
+  
   public addPoint() {
     this.text.unshift({
       time: 0,
-      author: '',
+      speakerId: '',
       text: ''
     });
 
     let e = new Event('loadtext');
     (<HTMLIFrameElement>document.getElementsByTagName('iframe').item(0)).contentWindow.document.body.dispatchEvent(e);
   }
+
+  public clear() {
+    this.duration = 0;
+    this.id = '';
+    this.text = [];
+  }
 }
 
-type TextModel = {
+export type TextModel = {
   time: number,
-  author: string,
+  speakerId: string,
   text: string
 }
 
 const styles = {
   container: `
     display: grid;
-    grid-template-columns: 12% 1fr;
+    grid-template-columns: 70px 1fr;
     width: 100%;
     padding: 10px;
     color: #222222;
-    overflow: auto;
+    overflow: hidden;
   `,
   time: `
+    max-width: 70px;
     grid-column: 1;
     grid-row-start: 1;
     grid-row-end: 3;
     margin: auto;
     color: #222222;
-    overflow: auto;
+    overflow: hidden;
   `,
   header: `
     grid-column: 2;
     grid-row: 1;
     font-weight: 700;
     color: #222222;
-    overflow: auto;
+    overflow: hidden;
   `,
   text: `
     grid-column: 2;
     grid-row: 2;
     color: #222222;
-    overflow: auto;
+    overflow: hidden;
   `,
   plus: ``
 }

@@ -8,6 +8,23 @@
     text-align: center;
 }
 
+
+
+.voice {
+    width: 90%;
+    margin: 20px auto;
+    border-radius: 10px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    padding: 10px 20px;
+    background: #FFACC6;
+    border: 2px solid #FF3B78;
+    box-shadow: 1px 4px 4px 0px rgba(160, 160, 160, 0.33);
+    color: #FF3B78;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 .card {
     width: 320px;
     border-radius: 9px;

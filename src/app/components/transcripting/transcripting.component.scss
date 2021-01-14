@@ -9,11 +9,17 @@
 
 .video {
     display: grid;
-    grid-column: 0;
+    grid-template-rows: 110px 1fr;
+    grid-column: 1;
     height: calc(100vh - 68px - 150px);
 
-    > app-video {
-        margin: auto 20px;
+    > * {
+        margin: 20px;
+    }
+
+    .btn { 
+        height: max-content;
+        margin: 20px auto;
     }
 }
 
