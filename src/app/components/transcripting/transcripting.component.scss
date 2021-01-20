@@ -1,4 +1,5 @@
 @import '../../../assets/variables.scss';
+@import '../../../styles.scss';
 
 .main-container {
     display: grid;
@@ -8,16 +9,25 @@
 
 .video {
     display: grid;
-    grid-column: 0;
+    grid-template-rows: 110px 1fr;
+    grid-column: 1;
     height: calc(100vh - 68px - 150px);
-    background: rgba($color: $gradient-red, $alpha: 0.3);
 
-    > app-video {
-        margin: auto 20px;
+    > * {
+        margin: 20px;
+    }
+
+    .btn { 
+        height: max-content;
+        margin: 20px auto;
     }
 }
 
 .editor {
     height: calc(100vh - 68px - 150px - 40px);
+    margin: 20px;
+}
+
+.control-panel {
     margin: 20px;
 }

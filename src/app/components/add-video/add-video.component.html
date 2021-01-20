@@ -1,10 +1,13 @@
 <div>
     <div class="picker">
+        <div class="voice" (click)="loadVoice()">
+            <span>Запись голоса</span>
+        </div>
         <label for="audio" class="card red">
             <img src="../../../assets/icons/AudioFile.svg" />
             <div class="btn btn-primary">Загрузить аудио</div>
         </label>
-        <input name="audio" id="audio" type="file" />
+        <input name="audio" id="audio" type="file" accept="audio/*" />
         <label for="video" class="card blue">
             <img src="../../../assets/icons/VideoFile.svg" />
             <div class="btn btn-secondary">Загрузить видео</div>
