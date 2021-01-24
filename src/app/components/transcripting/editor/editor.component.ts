@@ -31,7 +31,7 @@ export class EditorComponent implements OnInit {
           console.log(editor.contentWindow.document.head.innerHTML);
           editorBody.contentEditable = 'false';
           clearInterval(id);
-          
+
           document.addEventListener('playerready', () => {
             this.text = this.textService.getFormatedText();
           });
@@ -53,10 +53,10 @@ export class EditorComponent implements OnInit {
                   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
                   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
                 ));
-                
+
                 this.text = this.textService.getFormatedText();
                 editorBody.innerHTML = this.text;
-    
+
                 let e = new Event('loadpoints');
                 document.dispatchEvent(e);
               }, 20000);
@@ -73,9 +73,9 @@ export class EditorComponent implements OnInit {
     mywindow.document.write('<html><head></head><body>');
     mywindow.document.write(document.getElementById('tinymce').innerHTML);
     mywindow.document.write('</body></html>');
-document.getElementsByClassName('s');
+    document.getElementsByClassName('s');
     mywindow.document.close(); // necessary for IE >= 10
-    mywindow.focus(); // necessary for IE >= 10*/
+    mywindow.focus(); // necessary for IE >= 10
 
     mywindow.print();
   }

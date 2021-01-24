@@ -13,23 +13,6 @@ export class TextService {
   constructor(private http: HttpClient) { }
 
   public async checkStatus(id: string) {
-    /*this.text = [
-      {
-        time: 1,
-        speakerId: 'Dean',
-        text: "Yeah, maybe we've found our witch doctor. All right, I'll see what I can go dig up on boomin' Granny. You go get online, check old obits, freak accidents, that sort of thing, see if she's whacked anybody before."
-      },
-      {
-        time: 4,
-        speakerId: 'Sam',
-        text: 'Right',
-      },
-      {
-        time: 6,
-        speakerId: 'Dean',
-        text: "Don't go surfing porn — that's not the kind of whacking I mean.",
-      }
-    ]*/
     this.id = id;
 
     return (await <any>this.http.get(environment.apiUrl + 'check_state?transcribe_id=' + id).toPromise()).state;
@@ -37,9 +20,9 @@ export class TextService {
 
   public async loadText(id: string): Promise<Array<TextModel>> {
     this.text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
-    
+
     this.text = this.text || [];
-    
+
     return this.text;
   }
 
@@ -89,7 +72,10 @@ export class TextService {
 
     this.text = text;
 
-    this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
+    if (this.id)
+    {
+      this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
+    }
 
     return text;
   }
@@ -126,7 +112,7 @@ export class TextService {
 
     return time
   }
-  
+
   public addPoint() {
     this.text.unshift({
       time: 0,

@@ -47,7 +47,7 @@ export class TranscriptingComponent implements OnInit {
       }, 1000);
     }
     else {
-
+      this.isLoading = false;
     }
 
     let audioContext;
@@ -63,7 +63,7 @@ export class TranscriptingComponent implements OnInit {
       audioContext = new AudioContext();
 
       input = audioContext.createMediaStreamSource(stream);
-      rec = new Recorder(input, {numChannels:1});
+      rec = new Recorder(input, { numChannels: 1 });
       rec.record();
     });
 
@@ -73,7 +73,7 @@ export class TranscriptingComponent implements OnInit {
       this.isLoading = true;
 
       stream.getAudioTracks().forEach(T => T.stop());
-      
+
       if (this.isRecording) {
         rec.exportWAV((blob) => {
           this.isRecording = false;
@@ -104,7 +104,7 @@ export class TranscriptingComponent implements OnInit {
         console.log(id);
         console.log(URL.createObjectURL(blob));
         let text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
-    
+
         if (text) {
           text.map(T => T.time = this.textService.duration || 0);
           this.textService.text.push(...text);
