@@ -5,7 +5,10 @@
         <app-video *ngIf="getType() !== 2"></app-video>
         <div class="progress-bar" *ngIf="isLoading">
             <label for="">Идёт расшифровка...</label>
-            <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
+            <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+        </div>
+        <div *ngIf="recognize_fail" class="progress-bar">
+            <label for="">Не удалось расшифровать</label>
         </div>
         <div (click)="addPoint()" class="btn btn-primary">Добавить метку</div>
     </div>
