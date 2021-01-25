@@ -3,6 +3,13 @@
         <div *ngIf="isRecording === false" class="btn btn-primary" (click)="startRecording()">Начать запись</div>
         <div *ngIf="isRecording === true" class="btn btn-secondary" (click)="stopRecording()">Завершить запись</div>
         <app-video *ngIf="getType() !== 2"></app-video>
+        <div class="progress-bar" *ngIf="isLoading">
+            <label for="">Идёт расшифровка...</label>
+            <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+        </div>
+        <div *ngIf="recognize_fail" class="progress-bar">
+            <label for="">Не удалось расшифровать</label>
+        </div>
         <div (click)="addPoint()" class="btn btn-primary">Добавить метку</div>
     </div>
     <div class="editor">

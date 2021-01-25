@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { start } from 'repl';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -13,23 +14,6 @@ export class TextService {
   constructor(private http: HttpClient) { }
 
   public async checkStatus(id: string) {
-    /*this.text = [
-      {
-        time: 1,
-        speakerId: 'Dean',
-        text: "Yeah, maybe we've found our witch doctor. All right, I'll see what I can go dig up on boomin' Granny. You go get online, check old obits, freak accidents, that sort of thing, see if she's whacked anybody before."
-      },
-      {
-        time: 4,
-        speakerId: 'Sam',
-        text: 'Right',
-      },
-      {
-        time: 6,
-        speakerId: 'Dean',
-        text: "Don't go surfing porn — that's not the kind of whacking I mean.",
-      }
-    ]*/
     this.id = id;
 
     return (await <any>this.http.get(environment.apiUrl + 'check_state?transcribe_id=' + id).toPromise()).state;
@@ -37,9 +21,9 @@ export class TextService {
 
   public async loadText(id: string): Promise<Array<TextModel>> {
     this.text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
-    
+
     this.text = this.text || [];
-    
+
     return this.text;
   }
 
@@ -54,17 +38,27 @@ export class TextService {
     return result;
   }
 
-  public getFormatedText(): string {
+  public getFormatedText(currentTime: number): string {
     return this.text.map((T, i, Ts) => {
+      if (currentTime === null || currentTime === undefined) {
+        currentTime = 0
+      }
+      let startTime = T.time;
+      let endTime = Ts[i + 1] ? Ts[i + 1].time : this.duration;
+      let textStyle = styles.text;
+      if (currentTime <= endTime && currentTime >= startTime) {
+        textStyle = styles.highlighted_text;
+      }
+
       return `
         <div data-container style="${styles.container}">
           <div class="time" contenteditable="true" style="${styles.time}">
-            ${this.convertSecondsToTime(T.time)} ${this.convertSecondsToTime(Ts[i + 1] ? Ts[i + 1].time : this.duration)}
+            ${this.convertSecondsToTime(startTime)} ${this.convertSecondsToTime(endTime)}
           </div>
           <div class="author" contenteditable="true" style="${styles.header}">
             ${T.speakerId}
           </div>
-          <div class="text" contenteditable="true" style="${styles.text}">
+          <div class="text" contenteditable="true" style="${textStyle}">
             ${T.text}
           </div>
         </div>
@@ -89,7 +83,9 @@ export class TextService {
 
     this.text = text;
 
-    this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
+    if (this.id) {
+      this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
+    }
 
     return text;
   }
@@ -110,7 +106,7 @@ export class TextService {
     }
     time += hours + ':';
     seconds = seconds % 3600;
-    console.log(seconds);
+    // console.log(seconds);
 
     let minutes: number = Math.floor(seconds / 60);
     if (minutes <= 9) {
@@ -126,7 +122,7 @@ export class TextService {
 
     return time
   }
-  
+
   public addPoint() {
     this.text.unshift({
       time: 0,
@@ -180,6 +176,13 @@ const styles = {
     grid-column: 2;
     grid-row: 2;
     color: #222222;
+    overflow: hidden;
+  `,
+  highlighted_text: `
+    grid-column: 2;
+    grid-row: 2;
+    color: #222;
+    background-color: #f0ff1f;
     overflow: hidden;
   `,
   plus: ``

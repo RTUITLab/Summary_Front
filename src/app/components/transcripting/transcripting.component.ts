@@ -16,6 +16,8 @@ export class TranscriptingComponent implements OnInit {
   public isLoading = false;
   public transpId = '';
 
+  public recognize_fail: boolean = false;
+
   constructor(
     private titleService: Title,
     private menuService: MenuOptionsService,
@@ -28,7 +30,7 @@ export class TranscriptingComponent implements OnInit {
     this.menuService.setOption(MenuOptions.Transcript);
     this.titleService.setTitle('Перевести');
 
-    this.isLoading = true;
+    this.loadingChange(true);
 
     this.textService.clear();
 
@@ -42,12 +44,12 @@ export class TranscriptingComponent implements OnInit {
 
           (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
 
-          this.isLoading = false;
+          this.loadingChange(false);
         }
       }, 1000);
     }
     else {
-
+      this.loadingChange(false);
     }
 
     let audioContext;
@@ -63,21 +65,21 @@ export class TranscriptingComponent implements OnInit {
       audioContext = new AudioContext();
 
       input = audioContext.createMediaStreamSource(stream);
-      rec = new Recorder(input, {numChannels:1});
+      rec = new Recorder(input, { numChannels: 1 });
       rec.record();
     });
 
     document.querySelector('app-transcripting').addEventListener('stoprecords', () => {
       rec.stop();
 
-      this.isLoading = true;
+      this.loadingChange(true);
 
       stream.getAudioTracks().forEach(T => T.stop());
-      
+
       if (this.isRecording) {
         rec.exportWAV((blob) => {
           this.isRecording = false;
-          this.recognizeSpeech(blob);
+          this.recognizeSpeech(blob, true);
         });
       }
     });
@@ -87,7 +89,7 @@ export class TranscriptingComponent implements OnInit {
     return this.mediaService.mediaType;
   }
 
-  public async recognizeSpeech(blob: Blob) {
+  public async recognizeSpeech(blob: Blob, wasRecording: boolean = false) {
     const data = new FormData();
     data.append('file', blob);
     data.append('service', 'google');
@@ -104,14 +106,17 @@ export class TranscriptingComponent implements OnInit {
         console.log(id);
         console.log(URL.createObjectURL(blob));
         let text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
-    
+
         if (text) {
           text.map(T => T.time = this.textService.duration || 0);
+          if (wasRecording) { // if user was recording his voice, so set speakerId to "Author"
+            text.map(T => T.speakerId = "Говорящий не определён");
+          }
           this.textService.text.push(...text);
           (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
         }
 
-        this.isLoading = false;
+        this.loadingChange(false, text === undefined || text === null || text.length === 0 ? true : false);
       }
     }, 1000)
   }
@@ -127,6 +132,11 @@ export class TranscriptingComponent implements OnInit {
   public stopRecording() {
     let e = new Event('stoprecords', { bubbles: false });
     document.querySelector('app-transcripting').dispatchEvent(e);
+  }
+
+  private loadingChange(isLoading: boolean, noText: boolean = false): void {
+    this.isLoading = isLoading;
+    this.recognize_fail = noText;
   }
 }
 

@@ -10,11 +10,25 @@ import { environment } from 'src/environments/environment';
 export class EditorComponent implements OnInit {
   text: string;
   id: any = null;
-
+  currentTime: number;
   constructor(private textService: TextService) { }
 
   ngOnInit(): void {
     this.disableEditor();
+
+    document.addEventListener("updateHighlights", (e) => {
+      let currentTime = e["detail"]["currentTime"];
+      this.currentTime = currentTime;
+
+      let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+      if (editor) {
+        let editorBody = editor.contentWindow.document.getElementById('tinymce');
+        if (editorBody) {
+          this.text = this.textService.getFormatedText(this.currentTime);
+          editorBody.innerHTML = this.text;
+        }
+      }
+    });
   }
 
   public getWindowHeight(): number {
@@ -31,15 +45,15 @@ export class EditorComponent implements OnInit {
           console.log(editor.contentWindow.document.head.innerHTML);
           editorBody.contentEditable = 'false';
           clearInterval(id);
-          
+
           document.addEventListener('playerready', () => {
-            this.text = this.textService.getFormatedText();
+            this.text = this.textService.getFormatedText(this.currentTime);
           });
-          this.text = this.textService.getFormatedText();
+          this.text = this.textService.getFormatedText(this.currentTime);
           editorBody.innerHTML = this.text;
 
           editorBody.addEventListener('loadtext', () => {
-            this.text = this.textService.getFormatedText();
+            this.text = this.textService.getFormatedText(this.currentTime);
             editorBody.innerHTML = this.text;
 
             let e = new Event('loadpoints');
@@ -48,15 +62,13 @@ export class EditorComponent implements OnInit {
             if (this.id === null) {
               console.log('null id')
               this.id = setInterval(() => {
-                console.log(this.textService.convertTextToModel(
-                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
-                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
-                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
-                ));
-                
-                this.text = this.textService.getFormatedText();
-                editorBody.innerHTML = this.text;
-    
+
+                // console.log(this.textService.convertTextToModel(
+                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
+                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
+                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
+                // ));
+
                 let e = new Event('loadpoints');
                 document.dispatchEvent(e);
               }, 20000);
@@ -73,9 +85,9 @@ export class EditorComponent implements OnInit {
     mywindow.document.write('<html><head></head><body>');
     mywindow.document.write(document.getElementById('tinymce').innerHTML);
     mywindow.document.write('</body></html>');
-document.getElementsByClassName('s');
+    document.getElementsByClassName('s');
     mywindow.document.close(); // necessary for IE >= 10
-    mywindow.focus(); // necessary for IE >= 10*/
+    mywindow.focus(); // necessary for IE >= 10
 
     mywindow.print();
   }
