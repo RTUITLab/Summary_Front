@@ -10,11 +10,16 @@ import { environment } from 'src/environments/environment';
 export class EditorComponent implements OnInit {
   text: string;
   id: any = null;
-
+  currentTime: number;
   constructor(private textService: TextService) { }
 
   ngOnInit(): void {
     this.disableEditor();
+
+    document.addEventListener("updateHighlights", (e) => {
+      let currentTime = e["detail"]["currentTime"];
+      this.currentTime = currentTime;
+    })
   }
 
   public getWindowHeight(): number {
@@ -33,13 +38,13 @@ export class EditorComponent implements OnInit {
           clearInterval(id);
 
           document.addEventListener('playerready', () => {
-            this.text = this.textService.getFormatedText();
+            this.text = this.textService.getFormatedText(this.currentTime);
           });
-          this.text = this.textService.getFormatedText();
+          this.text = this.textService.getFormatedText(this.currentTime);
           editorBody.innerHTML = this.text;
 
           editorBody.addEventListener('loadtext', () => {
-            this.text = this.textService.getFormatedText();
+            this.text = this.textService.getFormatedText(this.currentTime);
             editorBody.innerHTML = this.text;
 
             let e = new Event('loadpoints');
@@ -54,7 +59,7 @@ export class EditorComponent implements OnInit {
                   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
                 ));
 
-                this.text = this.textService.getFormatedText();
+                this.text = this.textService.getFormatedText(this.currentTime);
                 editorBody.innerHTML = this.text;
 
                 let e = new Event('loadpoints');

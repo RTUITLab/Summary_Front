@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { start } from 'repl';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -37,17 +38,27 @@ export class TextService {
     return result;
   }
 
-  public getFormatedText(): string {
+  public getFormatedText(currentTime: number): string {
     return this.text.map((T, i, Ts) => {
+      if (currentTime === null || currentTime === undefined) {
+        currentTime = 0
+      }
+      let startTime = T.time;
+      let endTime = Ts[i + 1] ? Ts[i + 1].time : this.duration;
+      let textStyle = styles.text;
+      if (currentTime <= endTime && currentTime >= startTime) {
+        textStyle = styles.highlighted_text;
+      }
+
       return `
         <div data-container style="${styles.container}">
           <div class="time" contenteditable="true" style="${styles.time}">
-            ${this.convertSecondsToTime(T.time)} ${this.convertSecondsToTime(Ts[i + 1] ? Ts[i + 1].time : this.duration)}
+            ${this.convertSecondsToTime(startTime)} ${this.convertSecondsToTime(endTime)}
           </div>
           <div class="author" contenteditable="true" style="${styles.header}">
             ${T.speakerId}
           </div>
-          <div class="text" contenteditable="true" style="${styles.text}">
+          <div class="text" contenteditable="true" style="${textStyle}">
             ${T.text}
           </div>
         </div>
@@ -72,8 +83,7 @@ export class TextService {
 
     this.text = text;
 
-    if (this.id)
-    {
+    if (this.id) {
       this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
     }
 
@@ -166,6 +176,12 @@ const styles = {
     grid-column: 2;
     grid-row: 2;
     color: #222222;
+    overflow: hidden;
+  `,
+  highlighted_text: `
+    grid-column: 2;
+    grid-row: 2;
+    color: red;
     overflow: hidden;
   `,
   plus: ``

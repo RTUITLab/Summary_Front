@@ -44,29 +44,36 @@ export class VideoComponent implements OnInit {
 
     this.btnPlayPause = document.getElementById('btnPlayPause');
     this.volumeBar = document.getElementById('player');
-    
+
     this.player.addEventListener('click', () => this.playVideo());
     this.player.addEventListener('ended', () => this.icon = 'Play');
-    
+
     this.player.addEventListener('canplay', () => {
       this.textService.setDuration(this.player.duration);
       this.canPlay = true;
 
-      let e = new Event('playerready', { bubbles: false } );
+      let e = new Event('playerready', { bubbles: false });
 
       document.dispatchEvent(e);
       this.times = this.textService.getTimes();
 
       setTimeout(() => this.progress = <HTMLDivElement>document.getElementById('progress'), 1000);
-      
-      this.player.addEventListener('timeupdate', () => this.progress.style.width = 100 * this.player.currentTime / this.player.duration + '%');
+
+      this.player.addEventListener('timeupdate', () => {
+        this.progress.style.width = 100 * this.player.currentTime / this.player.duration + '%'
+        let e = new CustomEvent("updateHighlights", {
+          detail: {
+            currentTime: this.player.currentTime ? this.player.currentTime : 0
+          }
+        })
+        document.dispatchEvent(e);
+      });
     });
 
     document.addEventListener('loadpoints', () => this.times = this.textService.getTimes());
   }
 
   public getType() {
-    //console.log(this.player)
     return this.mediaService.mediaType;
   }
 
@@ -103,7 +110,7 @@ export class VideoComponent implements OnInit {
   }
 
   public getProgress(): Array<number> {
-    return this.times.map(T => T/this.player.duration);
+    return this.times.map(T => T / this.player.duration);
   }
 
   public getUrl(): string {
