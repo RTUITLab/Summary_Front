@@ -106,7 +106,7 @@ export class TextService {
     }
     time += hours + ':';
     seconds = seconds % 3600;
-    console.log(seconds);
+    // console.log(seconds);
 
     let minutes: number = Math.floor(seconds / 60);
     if (minutes <= 9) {
@@ -181,7 +181,8 @@ const styles = {
   highlighted_text: `
     grid-column: 2;
     grid-row: 2;
-    color: red;
+    color: #222;
+    background-color: #f0ff1f;
     overflow: hidden;
   `,
   plus: ``

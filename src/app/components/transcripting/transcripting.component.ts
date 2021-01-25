@@ -110,7 +110,7 @@ export class TranscriptingComponent implements OnInit {
         if (text) {
           text.map(T => T.time = this.textService.duration || 0);
           if (wasRecording) { // if user was recording his voice, so set speakerId to "Author"
-            text.map(T => T.speakerId = "Автор");
+            text.map(T => T.speakerId = "Говорящий не определён");
           }
           this.textService.text.push(...text);
           (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));

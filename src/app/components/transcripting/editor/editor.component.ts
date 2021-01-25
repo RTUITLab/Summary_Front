@@ -19,7 +19,16 @@ export class EditorComponent implements OnInit {
     document.addEventListener("updateHighlights", (e) => {
       let currentTime = e["detail"]["currentTime"];
       this.currentTime = currentTime;
-    })
+
+      let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+      if (editor) {
+        let editorBody = editor.contentWindow.document.getElementById('tinymce');
+        if (editorBody) {
+          this.text = this.textService.getFormatedText(this.currentTime);
+          editorBody.innerHTML = this.text;
+        }
+      }
+    });
   }
 
   public getWindowHeight(): number {
@@ -53,14 +62,12 @@ export class EditorComponent implements OnInit {
             if (this.id === null) {
               console.log('null id')
               this.id = setInterval(() => {
-                console.log(this.textService.convertTextToModel(
-                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
-                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
-                  (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
-                ));
 
-                this.text = this.textService.getFormatedText(this.currentTime);
-                editorBody.innerHTML = this.text;
+                // console.log(this.textService.convertTextToModel(
+                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
+                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
+                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
+                // ));
 
                 let e = new Event('loadpoints');
                 document.dispatchEvent(e);
