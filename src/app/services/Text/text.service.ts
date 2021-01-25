@@ -58,8 +58,10 @@ export class TextService {
           <div class="author" contenteditable="true" style="${styles.header}">
             ${T.speakerId}
           </div>
-          <div class="text" contenteditable="true" style="${textStyle}">
-            ${T.text}
+          <div class="text" contenteditable="true">
+            <span style="${textStyle}">
+              ${T.text}
+            </span>
           </div>
         </div>
       `;
