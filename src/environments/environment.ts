@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   apiKey: 'dpuhlvkmuhiw4pqkz13tduq5olaaxog8vysvln1y72eehgo2',
-  apiUrl: 'https://dpforge.com/2/transcribe/',
-  clientId: '1888d895-ff30-44c2-8f76-f3f76f526fe2'
+  apiUrl: 'https://dpforge.com/2/transcribe/'
 };
 
 /*
