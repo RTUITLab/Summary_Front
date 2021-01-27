@@ -1,0 +1,13 @@
+<div class="center_block">
+    <div *ngIf="isSignIn; then signin else signup"></div>
+    <ng-template #signin>
+        <input type="text" placeholder="login" #login>
+        <input type="password" placeholder="password" #password>
+        <div class="btn btn-secondary" (click)="signIn(login.value, password.value)">Войти</div>
+        <div class="btn btn-primary" (click)="isSignIn = false" style="margin-top: 40px;">Зарегистрироваться
+        </div>
+    </ng-template>
+    <ng-template #signup>
+        <div class="btn btn-secondary" (click)="isSignIn = true">Уже есть аккаунт</div>
+    </ng-template>
+</div>
