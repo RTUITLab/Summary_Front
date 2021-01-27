@@ -19,6 +19,8 @@ import { FormsModule } from '@angular/forms';
 import { TextService } from './services/Text/text.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { AuthComponent } from './components/auth/auth.component';
+import { AuthService } from './services/Auth/auth.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     AddVideoComponent,
     TranscriptingComponent,
     VideoComponent,
-    EditorComponent
+    EditorComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   providers: [
     MenuOptionsService,
     MediaService,
-    TextService
+    TextService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
