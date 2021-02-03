@@ -17,10 +17,18 @@ import { MediaService } from './services/Media/media.service';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { FormsModule } from '@angular/forms';
 import { TextService } from './services/Text/text.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthComponent } from './components/auth/auth.component';
 import { AuthService } from './services/Auth/auth.service';
+
+// Angular material
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+// Google auth
+import { SocialLoginModule, SocialAuthServiceConfig, VKLoginProvider } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -43,13 +51,39 @@ import { AuthService } from './services/Auth/auth.service';
 
     // Angular material
     BrowserAnimationsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatFormFieldModule,
+    MatSelectModule,
+
+    // Google auth
+    SocialLoginModule,
+
   ],
   providers: [
     MenuOptionsService,
     MediaService,
     TextService,
-    AuthService
+    AuthService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '1021497487230-qciqlan3dmg1ls237o8ddsos2v272htd.apps.googleusercontent.com'
+            )
+          },
+          {
+            id: VKLoginProvider.PROVIDER_ID,
+            provider: new VKLoginProvider(
+              '7750181'
+            )
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })

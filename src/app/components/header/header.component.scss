@@ -35,9 +35,24 @@ img {
 
 .user-button {
     display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(2, auto);
     vertical-align: middle;
 
     * {
         margin: auto 0;
+    }
+
+    .user-avatar {
+        width: 68px;
+        height: 68px;
+        text-align: center;
+
+        .image {
+            border-radius: 50%;
+            width: 80%;
+            height: 80%;
+            margin-top: 10%;
+        }
     }
 }

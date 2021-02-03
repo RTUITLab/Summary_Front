@@ -36,6 +36,11 @@ export class TranscriptingComponent implements OnInit {
 
     if (this.mediaService.mediaType === MediaType.LocalAudio || this.mediaService.mediaType === MediaType.LocalVideo) {
       this.transpId = await this.mediaService.sendFile();
+      if (this.transpId === null) {
+        console.log("request failed");
+        this.loadingChange(false, true);
+      }
+      
       let id = setInterval(async () => {
         if ((await this.textService.checkStatus(this.transpId)) === 'READY') {
           clearInterval(id);

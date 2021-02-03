@@ -19,5 +19,74 @@
             <input type="text" placeholder="https://youtube.com">
             <span class="btn btn-primary">Загрузить</span>
         </div>
+
+        <div class="options">
+            <div class="options_lang">
+                <form>
+                    <mat-form-field class="form_field" color="accent">
+                        <mat-label>Выберите язык</mat-label>
+                        <mat-select [(ngModel)]="selectedLanguage" name="language">
+                            <mat-option *ngFor="let language of languages" [value]="language.value">
+                                {{language.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="options_service">
+                <form>
+                    <mat-form-field class="form_field" color="accent">
+                        <mat-label>Выберите сервис</mat-label>
+                        <mat-select [(ngModel)]="selectedService" name="service">
+                            <mat-option *ngFor="let service of services" [value]="service.value">
+                                {{service.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="options_speakers">
+                <form>
+                    <mat-form-field class="form_field" color="accent">
+                        <mat-label>Минимальное количество говорящих</mat-label>
+                        <mat-select [(ngModel)]="selectedSpeaker" name="speaker">
+                            <mat-option *ngFor="let speaker of speakers" [value]="speaker.value">
+                                {{speaker.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="options_type">
+                <form>
+                    <mat-form-field class="form_field" color="accent">
+                        <mat-label>Выберите тип</mat-label>
+                        <mat-select [(ngModel)]="selectedType" name="type">
+                            <mat-option *ngFor="let type of types" [value]="type.value">
+                                {{type.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+                <div class="options_type_help" (click)="showHelp = !showHelp">&#63;</div>
+            </div>
+            <div class="options_type_help_text" *ngIf="showHelp">
+                <span class="title">
+                    <i style="letter-spacing: normal;">Выбрать тип для модели распознавания:</i>
+                </span>
+                <br>
+                <span>
+                    <strong>Телефонный разговор</strong> - Используйте эту модель для расшифровки аудио во время <i>телефонного</i> разговора.
+                </span>
+                <br>
+                <span>
+                    <strong>Командование и поиск</strong> - Используйте эту модель для расшифровки более <i>коротких</i> аудиоклипов. Наример, голосовые команды или голосовой поиск.
+                </span>
+                <br>
+                <span>
+                    <strong>По умолчанию</strong> - Используйте эту модель, если ваша аудиосистема не подходит ни к одной из ранее описанных моделей. Например, <i>длинные</i> аудиозаписи.
+                </span>
+            </div>
+        </div>
     </div>
 </div>

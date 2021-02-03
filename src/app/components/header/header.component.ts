@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/menu-options.service';
 
 @Component({
@@ -7,8 +8,8 @@ import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/me
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
-  constructor(private menuService: MenuOptionsService) { }
+  user: SocialUser;
+  constructor(private menuService: MenuOptionsService, private socialAuthService: SocialAuthService) { }
 
   public setOption(option: MenuOptions) {
     this.menuService.setOption(option);
@@ -22,6 +23,10 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.socialAuthService.authState.subscribe((user) => {
+      this.user = user;
+    });
+    // this.socialAuthService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 
 }
