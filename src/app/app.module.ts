@@ -26,6 +26,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+// Google auth
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,12 +55,35 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     MatSelectModule,
 
+    // Google auth
+    SocialLoginModule,
+
   ],
   providers: [
     MenuOptionsService,
     MediaService,
     TextService,
-    AuthService
+    AuthService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '1021497487230-qciqlan3dmg1ls237o8ddsos2v272htd.apps.googleusercontent.com'
+            )
+          },
+          {
+            id: VKLoginProvider.PROVIDER_ID,
+            provider: new VKLoginProvider(
+              '7750181'
+            )
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })
