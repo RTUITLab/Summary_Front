@@ -27,8 +27,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 // Google auth
-import { SocialLoginModule, SocialAuthServiceConfig, VKLoginProvider } from 'angularx-social-login';
-import { GoogleLoginProvider } from 'angularx-social-login';
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
 
 @NgModule({
   declarations: [
