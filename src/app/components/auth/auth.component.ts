@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { GoogleLoginProvider, SocialAuthService, SocialUser, VKLoginProvider } from 'angularx-social-login';
 import { AuthService } from 'src/app/services/Auth/auth.service';
 import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/menu-options.service';
@@ -14,8 +15,16 @@ export class AuthComponent implements OnInit {
 
   constructor(private authService: AuthService,
     private menuOptionsService: MenuOptionsService,
-    private socialAuthService: SocialAuthService) {
+    private socialAuthService: SocialAuthService,
+    private activatedRoute: ActivatedRoute) {
     this.isSignIn = true;
+    this.activatedRoute.queryParams.subscribe(qparams => {
+      let ghcode = qparams["code"];
+      if (ghcode !== null && ghcode !== undefined && ghcode !== "")
+      {
+        this.authService.signInWithGithub(ghcode);
+      }
+    })
   }
 
   ngOnInit(): void {
