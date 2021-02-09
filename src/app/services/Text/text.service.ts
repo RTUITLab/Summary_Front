@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TextService {
   public text: Array<TextModel> = [];
-  public speakers = new Set();
+  public speakers = new Set<string>();
   public duration: number;
   private id: string;
 
@@ -26,7 +26,7 @@ export class TextService {
 
     if (this.text !== []) {
       this.text.forEach(T => {
-        this.speakers.add(T.speakerId);
+        this.speakers.add(T.speakerId.toString());
       });
     }
 
@@ -59,15 +59,9 @@ export class TextService {
 
       return `
         <div data-container style="${styles.container}">
-          <div class="time" contenteditable="true" style="${styles.time}">
-            ${this.convertSecondsToTime(startTime)} ${this.convertSecondsToTime(endTime)}
-          </div>
-          <div class="author" contenteditable="true" style="${styles.header}">
-            ${T.speakerId}
-          </div>
-          <div class="text" contenteditable="true" style="${textStyle}">
-            ${T.text}
-          </div>
+          <div class="time" contenteditable="true" style="${styles.time}">${this.convertSecondsToTime(startTime)} ${this.convertSecondsToTime(endTime)}</div>
+          <div class="author" contenteditable="true" style="${styles.header}">${T.speakerId}</div>
+          <div class="text" contenteditable="true" style="${textStyle}">${T.text}</div>
         </div>
       `;
     }).join('');
@@ -152,13 +146,21 @@ export class TextService {
     (<HTMLIFrameElement>document.getElementsByTagName('iframe').item(0)).contentWindow.document.body.dispatchEvent(e);
   }
 
-  public changeSpeakers(old_val: string, new_val: string): TextModel[] {
+  public changeSpeakers(old_vals: string[], new_vals: string[]): void {
     this.text.forEach(T => {
-      if (T.speakerId.toString() == old_val) {
-        T.speakerId = new_val;
-      }
+      old_vals.forEach((val, i, arr) => {
+        if (T.speakerId.toString() == val) {
+          T.speakerId = new_vals[i];
+        }
+      });
     });
-    return this.text;
+
+    this.speakers.clear();
+    this.text.forEach(T => {
+      this.speakers.add(T.speakerId);
+    });
+
+    // return this.speakers;
   }
 
   public clear() {

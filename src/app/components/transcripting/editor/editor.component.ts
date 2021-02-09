@@ -57,28 +57,51 @@ export class EditorComponent implements OnInit {
 
             if (this.id === null) {
               console.log("text was loaded - convert text to model")
-              this.id = setInterval(() => {
-
-                let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
-
-                console.log(this.textService.convertTextToModel(
-                  editor.contentWindow.document.getElementsByClassName('time'),
-                  editor.contentWindow.document.getElementsByClassName('author'),
-                  editor.contentWindow.document.getElementsByClassName('text'),
-                ));
-
-                this.text = this.textService.getFormatedText(this.currentTime);
-                let editorBody = editor.contentWindow.document.getElementById('tinymce');
-                editorBody.innerHTML = this.text;
-
-                let e = new Event('loadpoints');
-                document.dispatchEvent(e);
-              }, 20000);
+              this.startAutoSave();
             }
           })
         }
       }
     }, 100);
+  }
+
+  autoSaveStartTime = 0;
+  timerId;
+  private startAutoSave(): void {
+    clearTimeout(this.timerId);
+    this.timerId = setInterval(() => {
+      let e = new CustomEvent("updateAutoSave", {
+        detail: {
+          timeRemaining: this.getRemainingTime()
+        }
+      })
+      document.dispatchEvent(e);
+    }, 1000);
+    this.autoSaveStartTime = (new Date()).getTime();
+    this.id = setInterval(() => {
+      let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+
+      console.log(this.textService.convertTextToModel(
+        editor.contentWindow.document.getElementsByClassName('time'),
+        editor.contentWindow.document.getElementsByClassName('author'),
+        editor.contentWindow.document.getElementsByClassName('text'),
+      ));
+
+      this.text = this.textService.getFormatedText(this.currentTime);
+      let editorBody = editor.contentWindow.document.getElementById('tinymce');
+      editorBody.innerHTML = this.text;
+
+      let e = new Event('loadpoints');
+      document.dispatchEvent(e);
+
+      clearTimeout(this.id);
+      this.startAutoSave();
+    }, 20000);
+  }
+
+  public getRemainingTime() {
+
+    return 20000 - ((new Date()).getTime() - this.autoSaveStartTime);
   }
 
   public print(): void {

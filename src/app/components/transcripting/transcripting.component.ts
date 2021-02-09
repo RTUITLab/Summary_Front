@@ -15,7 +15,9 @@ export class TranscriptingComponent implements OnInit {
   public isRecording = false;
   public isLoading = false;
   public transpId = '';
-  public speakers;
+  public speakers: string[];
+  public speakersNew: string[];
+  public timeRemaining: string;
 
   public recognize_fail: boolean = false;
 
@@ -25,8 +27,9 @@ export class TranscriptingComponent implements OnInit {
     private textService: TextService,
     private mediaService: MediaService,
     private http: HttpClient
-  ) { 
+  ) {
     this.speakers = [];
+    this.speakersNew = [];
   }
 
   async ngOnInit() {
@@ -91,6 +94,15 @@ export class TranscriptingComponent implements OnInit {
         });
       }
     });
+
+    document.addEventListener("updateAutoSave", (e) => {
+      let num = e["detail"]["timeRemaining"];
+      num = Math.floor(num / 1000);
+      if (num <= 0) {
+        num = 0;
+      }
+      this.timeRemaining = num.toString();
+    });
   }
 
   public getType() {
@@ -137,11 +149,24 @@ export class TranscriptingComponent implements OnInit {
     return this.textService.getTextToClipBoard();
   }
 
-  public speakersChanged(new_val: string, index: number): void {
-    if (new_val == "") {
-      new_val = "Говорящий не определён";
+  public speakersChanged(): void {
+    this.textService.changeSpeakers(this.speakers, this.speakersNew);
+    this.speakers = [];
+    this.speakersNew = [];
+    this.textService.speakers.forEach(sp => {
+      this.speakers.push(sp);
+      this.speakersNew.push(sp);
+    });
+    (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0))
+      .contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
+  }
+
+  public trackSpeaker(index: number, new_val: string) {
+    if (this.speakersNew) {
+      this.speakersNew[index] = new_val;
+      console.log(`${index} - ${new_val}`);
     }
-    this.textService.changeSpeakers(this.speakers[index], new_val);
+    return index;
   }
 
   public startRecording() {
@@ -156,9 +181,18 @@ export class TranscriptingComponent implements OnInit {
   private loadingChange(isLoading: boolean, noText: boolean = false): void {
     this.isLoading = isLoading;
     this.recognize_fail = noText;
-    this.textService.speakers.forEach(sp =>{
+
+    this.speakers = [];
+    this.speakersNew = [];
+    this.textService.speakers.forEach(sp => {
       this.speakers.push(sp);
+      this.speakersNew.push(sp);
     });
+    console.log(this.textService.speakers);
+    console.log(this.speakers);
+    console.log(this.speakersNew);
+
+
   }
 }
 
