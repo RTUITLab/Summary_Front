@@ -15,4 +15,23 @@
     <div class="editor">
         <app-editor></app-editor>
     </div>
+    <div class="editor_side">
+        <div class="editor_speakers" *ngIf="speakers.length !== 0">
+            <span>Изменить имя говорящx (в разработке):</span>
+            <mat-form-field *ngFor="let speaker of speakers; index as i" color="accent">
+                <input matInput [value]="speaker" type="text" (input)="speakersChanged(test.value, i)" #test>
+              </mat-form-field>
+        </div>
+        <div class="autosave_timer">
+            <span>Автосохранение через</span>
+        </div>
+    </div>
+    <div class="special_button">
+        <div [cdkCopyToClipboard]="copyTextToClipboard()" class="btn btn-secondary">Специальная кнопка для копирования текста в буфер обмена</div>
+    </div>
+    <div class="timeline">
+        <span>
+            timeline
+        </span>
+    </div>
 </div>

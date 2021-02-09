@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TextService {
   public text: Array<TextModel> = [];
+  public speakers = new Set();
   public duration: number;
   private id: string;
 
@@ -22,6 +23,12 @@ export class TextService {
     this.text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
 
     this.text = this.text || [];
+
+    if (this.text !== []) {
+      this.text.forEach(T => {
+        this.speakers.add(T.speakerId);
+      });
+    }
 
     return this.text;
   }
@@ -45,6 +52,7 @@ export class TextService {
       let startTime = T.time;
       let endTime = Ts[i + 1] ? Ts[i + 1].time : this.duration;
       let textStyle = styles.text;
+
       if (currentTime <= endTime && currentTime >= startTime) {
         textStyle = styles.highlighted_text;
       }
@@ -57,10 +65,8 @@ export class TextService {
           <div class="author" contenteditable="true" style="${styles.header}">
             ${T.speakerId}
           </div>
-          <div class="text" contenteditable="true">
-            <span style="${textStyle}">
-              ${T.text}
-            </span>
+          <div class="text" contenteditable="true" style="${textStyle}">
+            ${T.text}
           </div>
         </div>
       `;
@@ -68,6 +74,7 @@ export class TextService {
   }
 
   public convertTextToModel(times: HTMLCollectionOf<Element>, authors: HTMLCollectionOf<Element>, texts: HTMLCollectionOf<Element>): Array<TextModel> {
+
     let text: Array<TextModel> = [];
 
     for (let i = 0; i < times.length; i++) {
@@ -89,6 +96,16 @@ export class TextService {
     }
 
     return text;
+  }
+
+  public getTextToClipBoard(): string {
+    let clipText = "";
+    this.text.forEach((T, i, Ts) => {
+      let startTime = T.time;
+      let endTime = Ts[i + 1] ? Ts[i + 1].time : this.duration;
+      clipText += `Говорящий: ${T.speakerId}\nВремя (в секундах): ${startTime} - ${endTime}\nРасшифровка: ${T.text}\n\n`;
+    })
+    return clipText;
   }
 
   private convertTimeToSeconds(time: string): number {
@@ -135,6 +152,15 @@ export class TextService {
     (<HTMLIFrameElement>document.getElementsByTagName('iframe').item(0)).contentWindow.document.body.dispatchEvent(e);
   }
 
+  public changeSpeakers(old_val: string, new_val: string): TextModel[] {
+    this.text.forEach(T => {
+      if (T.speakerId.toString() == old_val) {
+        T.speakerId = new_val;
+      }
+    });
+    return this.text;
+  }
+
   public clear() {
     this.duration = 0;
     this.id = '';
@@ -177,6 +203,7 @@ const styles = {
     grid-column: 2;
     grid-row: 2;
     color: #222222;
+    background-color: #fff;
     overflow: hidden;
   `,
   highlighted_text: `

@@ -17,17 +17,10 @@ export class EditorComponent implements OnInit {
     this.disableEditor();
 
     document.addEventListener("updateHighlights", (e) => {
-      let currentTime = e["detail"]["currentTime"];
-      this.currentTime = currentTime;
+      this.currentTime = e["detail"]["currentTime"];
 
-      let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
-      if (editor) {
-        let editorBody = editor.contentWindow.document.getElementById('tinymce');
-        if (editorBody) {
-          this.text = this.textService.getFormatedText(this.currentTime);
-          editorBody.innerHTML = this.text;
-        }
-      }
+      (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0))
+        .contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
     });
   }
 
@@ -53,6 +46,9 @@ export class EditorComponent implements OnInit {
           editorBody.innerHTML = this.text;
 
           editorBody.addEventListener('loadtext', () => {
+            let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+            let editorBody = editor.contentWindow.document.getElementById('tinymce');
+
             this.text = this.textService.getFormatedText(this.currentTime);
             editorBody.innerHTML = this.text;
 
@@ -60,14 +56,20 @@ export class EditorComponent implements OnInit {
             document.dispatchEvent(e);
 
             if (this.id === null) {
-              console.log('null id')
+              console.log("text was loaded - convert text to model")
               this.id = setInterval(() => {
 
-                // console.log(this.textService.convertTextToModel(
-                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('time'),
-                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('author'),
-                //   (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.getElementsByClassName('text'),
-                // ));
+                let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+
+                console.log(this.textService.convertTextToModel(
+                  editor.contentWindow.document.getElementsByClassName('time'),
+                  editor.contentWindow.document.getElementsByClassName('author'),
+                  editor.contentWindow.document.getElementsByClassName('text'),
+                ));
+
+                this.text = this.textService.getFormatedText(this.currentTime);
+                let editorBody = editor.contentWindow.document.getElementById('tinymce');
+                editorBody.innerHTML = this.text;
 
                 let e = new Event('loadpoints');
                 document.dispatchEvent(e);

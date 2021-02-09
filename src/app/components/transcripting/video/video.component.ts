@@ -29,7 +29,7 @@ export class VideoComponent implements OnInit {
 
   ngOnInit(): void {
     this.player = <HTMLVideoElement>document.getElementById('player');
-    console.log(this.player)
+    // console.log(this.player)
 
     if (this.mediaService.url) {
       if (this.mediaService.mediaType === MediaType.LocalVideo) {

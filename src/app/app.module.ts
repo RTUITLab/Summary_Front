@@ -25,6 +25,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Google auth
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
@@ -54,6 +57,9 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
     MatProgressBarModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatInputModule,
+
+    ClipboardModule,
 
     // Google auth
     SocialLoginModule,

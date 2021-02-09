@@ -15,6 +15,7 @@ export class TranscriptingComponent implements OnInit {
   public isRecording = false;
   public isLoading = false;
   public transpId = '';
+  public speakers;
 
   public recognize_fail: boolean = false;
 
@@ -24,7 +25,9 @@ export class TranscriptingComponent implements OnInit {
     private textService: TextService,
     private mediaService: MediaService,
     private http: HttpClient
-  ) { }
+  ) { 
+    this.speakers = [];
+  }
 
   async ngOnInit() {
     this.menuService.setOption(MenuOptions.Transcript);
@@ -40,7 +43,7 @@ export class TranscriptingComponent implements OnInit {
         console.log("request failed");
         this.loadingChange(false, true);
       }
-      
+
       let id = setInterval(async () => {
         if ((await this.textService.checkStatus(this.transpId)) === 'READY') {
           clearInterval(id);
@@ -130,6 +133,17 @@ export class TranscriptingComponent implements OnInit {
     this.textService.addPoint();
   }
 
+  public copyTextToClipboard(): string {
+    return this.textService.getTextToClipBoard();
+  }
+
+  public speakersChanged(new_val: string, index: number): void {
+    if (new_val == "") {
+      new_val = "Говорящий не определён";
+    }
+    this.textService.changeSpeakers(this.speakers[index], new_val);
+  }
+
   public startRecording() {
     document.querySelector('app-transcripting').dispatchEvent(new Event('startrecord'));
   }
@@ -142,6 +156,9 @@ export class TranscriptingComponent implements OnInit {
   private loadingChange(isLoading: boolean, noText: boolean = false): void {
     this.isLoading = isLoading;
     this.recognize_fail = noText;
+    this.textService.speakers.forEach(sp =>{
+      this.speakers.push(sp);
+    });
   }
 }
 
