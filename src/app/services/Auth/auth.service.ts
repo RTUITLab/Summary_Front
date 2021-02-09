@@ -6,4 +6,8 @@ import { Injectable } from '@angular/core';
 export class AuthService {
 
   constructor() { }
+
+  signInWithGithub(code: string): void {
+    // TODO server side authorization
+  }
 }

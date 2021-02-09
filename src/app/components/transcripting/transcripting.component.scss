@@ -4,7 +4,7 @@
 .main-container {
     display: grid;
     grid-template-columns: $default-grid;
-    width: 100vw;
+    width: 100%;
 }
 
 .video {
@@ -28,8 +28,31 @@
     margin: 20px;
 }
 
-.control-panel {
-    margin: 20px;
+.editor_side {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+
+    margin-top: 20px;
+    width: 100%;
+}
+
+.special_button {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 4;
+
+    .btn {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.timeline {
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    text-align: center;
 }
 
 .progress-bar {
