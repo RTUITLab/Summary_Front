@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { MediaService, MediaType } from 'src/app/services/Media/media.service';
 import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/menu-options.service';
@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './transcripting.component.html',
   styleUrls: ['./transcripting.component.scss']
 })
-export class TranscriptingComponent implements OnInit {
+export class TranscriptingComponent implements OnInit, OnDestroy {
   public isRecording = false;
   public isLoading = false;
   public transpId = '';
@@ -20,6 +20,9 @@ export class TranscriptingComponent implements OnInit {
   public timeRemaining: string;
 
   public recognize_fail: boolean = false;
+
+  private checkStatusId;
+  private recognizeSpeechId;
 
   constructor(
     private titleService: Title,
@@ -47,9 +50,9 @@ export class TranscriptingComponent implements OnInit {
         this.loadingChange(false, true);
       }
 
-      let id = setInterval(async () => {
+      this.checkStatusId = setInterval(async () => {
         if ((await this.textService.checkStatus(this.transpId)) === 'READY') {
-          clearInterval(id);
+          clearInterval(this.checkStatusId);
 
           await this.textService.loadText(this.transpId);
 
@@ -118,10 +121,10 @@ export class TranscriptingComponent implements OnInit {
 
     let id = (await <any>this.http.post(environment.apiUrl + 'upload', data).toPromise()).transcribeId;
 
-    let intId = setInterval(async () => {
+    this.recognizeSpeechId = setInterval(async () => {
       let state = (await <any>this.http.get(environment.apiUrl + 'check_state?transcribe_id=' + id).toPromise()).state;
       if (state === 'READY') {
-        clearInterval(intId);
+        clearInterval(this.recognizeSpeechId);
 
         console.log(id);
         console.log(URL.createObjectURL(blob));
@@ -188,11 +191,12 @@ export class TranscriptingComponent implements OnInit {
       this.speakers.push(sp);
       this.speakersNew.push(sp);
     });
-    console.log(this.textService.speakers);
-    console.log(this.speakers);
-    console.log(this.speakersNew);
+  }
 
-
+  ngOnDestroy(): void {
+    clearInterval(this.recognizeSpeechId);
+    clearInterval(this.checkStatusId);
+    this.textService.clear();
   }
 }
 
