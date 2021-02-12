@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TextService } from 'src/app/services/Text/text.service';
 import { environment } from 'src/environments/environment';
 
@@ -7,10 +7,13 @@ import { environment } from 'src/environments/environment';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
   text: string;
   id: any = null;
   currentTime: number;
+
+  private disableEditorId;
+
   constructor(private textService: TextService) { }
 
   ngOnInit(): void {
@@ -29,7 +32,7 @@ export class EditorComponent implements OnInit {
   }
 
   private async disableEditor() {
-    let id = setInterval(() => {
+    this.disableEditorId = setInterval(() => {
       let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
       if (editor) {
         let editorBody = editor.contentWindow.document.getElementById('tinymce');
@@ -37,7 +40,7 @@ export class EditorComponent implements OnInit {
           editor.contentWindow.document.head.innerHTML += '<style>*:focus { outline: none; }</style>';
           console.log(editor.contentWindow.document.head.innerHTML);
           editorBody.contentEditable = 'false';
-          clearInterval(id);
+          clearInterval(this.disableEditorId);
 
           document.addEventListener('playerready', () => {
             this.text = this.textService.getFormatedText(this.currentTime);
@@ -68,7 +71,7 @@ export class EditorComponent implements OnInit {
   autoSaveStartTime = 0;
   timerId;
   private startAutoSave(): void {
-    clearTimeout(this.timerId);
+    clearInterval(this.timerId);
     this.timerId = setInterval(() => {
       let e = new CustomEvent("updateAutoSave", {
         detail: {
@@ -77,6 +80,7 @@ export class EditorComponent implements OnInit {
       })
       document.dispatchEvent(e);
     }, 1000);
+
     this.autoSaveStartTime = (new Date()).getTime();
     this.id = setInterval(() => {
       let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
@@ -100,7 +104,6 @@ export class EditorComponent implements OnInit {
   }
 
   public getRemainingTime() {
-
     return 20000 - ((new Date()).getTime() - this.autoSaveStartTime);
   }
 
@@ -122,5 +125,11 @@ export class EditorComponent implements OnInit {
 
   public getApiKey(): string {
     return environment.apiKey || 'null';
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.disableEditorId);
+    clearInterval(this.timerId);
+    clearInterval(this.id);
   }
 }

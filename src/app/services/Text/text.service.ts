@@ -167,6 +167,7 @@ export class TextService {
     this.duration = 0;
     this.id = '';
     this.text = [];
+    this.speakers.clear();
   }
 }
 

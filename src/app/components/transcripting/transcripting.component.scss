@@ -53,6 +53,18 @@
     grid-column-start: 1;
     grid-column-end: 4;
     text-align: center;
+
+    margin: 2px;
+    border: 2px solid $accent-red;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > div {
+        height: 400px;
+    }
 }
 
 .progress-bar {

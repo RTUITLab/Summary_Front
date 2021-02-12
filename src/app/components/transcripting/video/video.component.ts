@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaService, MediaType } from 'src/app/services/Media/media.service';
 import { TextService } from 'src/app/services/Text/text.service';
 
@@ -7,7 +7,7 @@ import { TextService } from 'src/app/services/Text/text.service';
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss']
 })
-export class VideoComponent implements OnInit {
+export class VideoComponent implements OnInit, OnDestroy {
   public url;
 
   private player: HTMLVideoElement;
@@ -22,6 +22,8 @@ export class VideoComponent implements OnInit {
 
   public times = [];
 
+  private progressId;
+
   constructor(
     private mediaService: MediaService,
     private textService: TextService
@@ -29,7 +31,6 @@ export class VideoComponent implements OnInit {
 
   ngOnInit(): void {
     this.player = <HTMLVideoElement>document.getElementById('player');
-    // console.log(this.player)
 
     if (this.mediaService.url) {
       if (this.mediaService.mediaType === MediaType.LocalVideo) {
@@ -57,7 +58,7 @@ export class VideoComponent implements OnInit {
       document.dispatchEvent(e);
       this.times = this.textService.getTimes();
 
-      setTimeout(() => this.progress = <HTMLDivElement>document.getElementById('progress'), 1000);
+      this.progressId = setTimeout(() => this.progress = <HTMLDivElement>document.getElementById('progress'), 1000);
 
       this.player.addEventListener('timeupdate', () => {
         this.progress.style.width = 100 * this.player.currentTime / this.player.duration + '%'
@@ -115,5 +116,9 @@ export class VideoComponent implements OnInit {
 
   public getUrl(): string {
     return this.mediaService.url;
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.progressId);
   }
 }

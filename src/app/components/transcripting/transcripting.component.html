@@ -23,7 +23,7 @@
             </mat-form-field>
             <div class="btn btn-primary" (click)="speakersChanged()">Изменить</div>
         </div>
-        <div class="autosave_timer">
+        <div class="autosave_timer" *ngIf="timeRemaining !== undefined && timeRemaining.length !== 0">
             <span>Автосохранение через</span>
             <br>
             <span>{{timeRemaining}}</span>
@@ -34,8 +34,14 @@
             текста в буфер обмена</div>
     </div>
     <div class="timeline">
-        <span>
+        <div>
             timeline
-        </span>
+        </div>
+        <div>
+            <label for="audio" class="card red">
+                <img src="../../../assets/icons/AudioFile.svg" />
+                <div class="btn btn-primary">Загрузить картинку</div>
+            </label>
+        </div>
     </div>
 </div>
