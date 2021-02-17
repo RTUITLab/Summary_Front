@@ -67,16 +67,16 @@ export class TextService {
     }).join('');
   }
 
-  public convertTextToModel(times: HTMLCollectionOf<Element>, authors: HTMLCollectionOf<Element>, texts: HTMLCollectionOf<Element>): Array<TextModel> {
+  public convertTextToModel(times: any[], authors: any[], texts: any[]): Array<TextModel> {
 
     let text: Array<TextModel> = [];
 
     for (let i = 0; i < times.length; i++) {
-      if (times.item(i).innerHTML.split(' ').find(T => T.length > 5)) {
+      if (times[i].split(' ').find(T => T.length > 5)) {
         text.push({
-          time: this.convertTimeToSeconds(times.item(i).innerHTML),
-          speakerId: authors.item(i).innerHTML,
-          text: texts.item(i).innerHTML
+          time: this.convertTimeToSeconds(times[i]),
+          speakerId: authors[i],
+          text: texts[i]
         });
       }
     }
