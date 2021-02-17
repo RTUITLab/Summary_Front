@@ -100,7 +100,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       let docs = editor.contentWindow.document.querySelectorAll('[data-container]');
       console.log(docs);
-      
+
       let times = [];
       let authors = [];
       let texts = [];
@@ -135,7 +135,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       console.log(this.textService.convertTextToModel(times, authors, texts));
 
-      this.text = this.textService.getFormatedText(this.currentTime);      
+      this.text = this.textService.getFormatedText(this.currentTime);
       let editorBody = editor.contentWindow.document.getElementById('tinymce');
       editorBody.innerHTML = this.text;
 

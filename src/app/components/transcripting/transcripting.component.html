@@ -19,9 +19,9 @@
         <div class="editor_speakers" *ngIf="speakers.length !== 0">
             <span>Изменить имя говорящx:</span>
             <mat-form-field *ngFor="let speaker of speakers; let i = index; trackBy: trackSpeaker" color="accent">
-                <input matInput [value]="speaker" type="text" [(ngModel)]="speakersNew[i]">
+                <input matInput [value]="speaker" type="text" [(ngModel)]="speakersNew[i]" (input)="speakersChanged()">
             </mat-form-field>
-            <div class="btn btn-primary" (click)="speakersChanged()">Изменить</div>
+            <!-- <div class="btn btn-primary" (click)="speakersChanged()">Изменить</div> -->
         </div>
         <div class="autosave_timer" *ngIf="timeRemaining !== undefined && timeRemaining.length !== 0">
             <span>Автосохранение через</span>
