@@ -1,4 +1,8 @@
 <div class="center_block">
+    <div class="btn btn-secondary" *ngIf="state !== conferenceState.Default" (click)="state = conferenceState.Default"
+        style="margin-bottom: 50px;">
+        Назад
+    </div>
     <div *ngIf="state === conferenceState.Default">
         <div class="btn btn-primary" (click)="state = conferenceState.Create">
             Создать конференцию
@@ -11,9 +15,6 @@
         </div>
     </div>
     <div *ngIf="state === conferenceState.Create">
-        <div class="btn btn-secondary" (click)="state = conferenceState.Default" style="margin-bottom: 50px;">
-            Назад
-        </div>
         <input type="text" placeholder="Название конференции" #conferenceName>
         <input type="text" placeholder="Имя организатора" #organizatorName>
         <div class="btn btn-primary" (click)="create(conferenceName.value, organizatorName.value)">
@@ -21,9 +22,6 @@
         </div>
     </div>
     <div *ngIf="state === conferenceState.Join">
-        <div class="btn btn-primary" (click)="state = conferenceState.Default">
-            Назад
-        </div>
         <input type="text" placeholder="Номер конференции" #conferenceId>
         <input type="text" placeholder="Имя участника" #participantName>
         <div class="btn btn-primary" (click)="join(conferenceId.value, participantName.value)">
@@ -31,8 +29,8 @@
         </div>
     </div>
     <div *ngIf="state === conferenceState.GetText">
-        <div class="btn btn-primary" (click)="state = conferenceState.Default">
-            Назад
-        </div>
+    </div>
+    <div *ngIf="isLoading" class="progress">
+        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
     </div>
 </div>
