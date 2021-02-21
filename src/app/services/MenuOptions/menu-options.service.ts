@@ -32,6 +32,10 @@ export class MenuOptionsService {
         this.titleService.setTitle('Расшифровка');
         break;
       }
+      case MenuOptions.Conference: {
+        this.titleService.setTitle('Конференции');
+        break;
+      }
       case MenuOptions.Auth: {
         this.titleService.setTitle('Авторизация');
         break;
@@ -49,6 +53,7 @@ export enum MenuOptions {
   Info,
   Language,
   Transcript,
+  Conference,
   Settings,
   Auth
 }

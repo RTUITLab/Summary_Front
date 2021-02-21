@@ -206,7 +206,6 @@ const styles = {
     grid-column: 2;
     grid-row: 2;
     color: #222222;
-    background-color: #fff;
     overflow: hidden;
   `,
   highlighted_text: `

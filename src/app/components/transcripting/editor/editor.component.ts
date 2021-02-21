@@ -151,18 +151,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     return 20000 - (new Date().getTime() - this.autoSaveStartTime);
   }
 
-  public print(): void {
-    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+  // public print(): void {
+  //   var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-    mywindow.document.write('<html><head></head><body>');
-    mywindow.document.write(document.getElementById('tinymce').innerHTML);
-    mywindow.document.write('</body></html>');
-    document.getElementsByClassName('s');
-    mywindow.document.close(); // necessary for IE >= 10
-    mywindow.focus(); // necessary for IE >= 10
+  //   mywindow.document.write('<html><head></head><body>');
+  //   mywindow.document.write(document.getElementById('tinymce').innerHTML);
+  //   mywindow.document.write('</body></html>');
+  //   document.getElementsByClassName('s');
+  //   mywindow.document.close(); // necessary for IE >= 10
+  //   mywindow.focus(); // necessary for IE >= 10
 
-    mywindow.print();
-  }
+  //   mywindow.print();
+  // }
 
   public change() {}
 

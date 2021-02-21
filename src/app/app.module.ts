@@ -32,6 +32,9 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 // Google auth
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
+import { ConferenceService } from './services/Conference/conference.service';
+import { ConferenceComponent } from './components/conference/conference.component';
+import { RoomComponent } from './components/conference/room/room.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,9 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
     TranscriptingComponent,
     VideoComponent,
     EditorComponent,
-    AuthComponent
+    AuthComponent,
+    ConferenceComponent,
+    RoomComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +75,7 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
     MediaService,
     TextService,
     AuthService,
+    ConferenceService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

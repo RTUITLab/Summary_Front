@@ -1,0 +1,12 @@
+<p>
+    {{conferenceName}} [{{conferenceId}}]
+</p>
+<p *ngIf='hostId !== undefined || hostId !== ""'>
+    hostId: {{hostId}}
+</p>
+<p *ngIf='participantId !== undefined || participantId !== ""'>
+    participantId: {{participantId}}
+</p>
+<div class="btn btn-primary" (click)="end()">
+    Завершить конференцию
+</div>

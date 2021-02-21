@@ -26,7 +26,6 @@ export class HeaderComponent implements OnInit {
     this.socialAuthService.authState.subscribe((user) => {
       this.user = user;
     });
-    // this.socialAuthService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 
 }
