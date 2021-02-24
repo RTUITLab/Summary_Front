@@ -1,12 +1,26 @@
-<p>
-    {{conferenceName}} [{{conferenceId}}]
-</p>
-<p *ngIf='hostId !== undefined || hostId !== ""'>
-    hostId: {{hostId}}
-</p>
-<p *ngIf='participantId !== undefined || participantId !== ""'>
-    participantId: {{participantId}}
-</p>
-<div class="btn btn-primary" (click)="end()">
-    Завершить конференцию
-</div>
+<div *ngIf="conferenceStarted; then conferenceYes else conferenceNo"></div>
+<ng-template #conferenceYes>
+    <p>
+        {{conferenceName}} [{{conferenceId}}]
+    </p>
+    <p *ngIf='hostId && !participantId'>
+        hostId: {{hostId}}
+    </p>
+    <p *ngIf='participantId'>
+        participantId: {{participantId}}
+    </p>
+
+    <div *ngFor="let tran of trans">
+        <p [style]="tran['style']">{{tran.name}}: {{tran.value}}</p>
+    </div>
+
+    <div class="btn btn-primary" (click)="end()">
+        Завершить конференцию
+    </div>
+    <audio id="player"></audio>
+</ng-template>
+<ng-template #conferenceNo>
+    <div>
+        Конференция кончилась
+    </div>
+</ng-template>

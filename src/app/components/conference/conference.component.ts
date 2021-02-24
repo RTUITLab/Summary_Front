@@ -12,16 +12,33 @@ export class ConferenceComponent implements OnInit {
   state: ConferenceState;
   conferenceState = ConferenceState;
   isLoading: boolean;
+
+  isJsonType: boolean;
+
+  translation: string;
   constructor(private menuOptions: MenuOptionsService,
-      private conferenceService: ConferenceService,
-      private router: Router) { 
-    this.state = ConferenceState.Default;
-  }
+    private conferenceService: ConferenceService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.menuOptions.setOption(MenuOptions.Conference);
     this.conferenceService.clearConference();
     this.loading(false);
+    this.state = ConferenceState.Default;
+    this.isJsonType = true;
+  }
+
+  changeState(newState: ConferenceState): void {
+    if (newState === ConferenceState.Create) {
+      this.state = newState;
+    } else if (newState === ConferenceState.Join) {
+      this.state = newState;
+    } else if (newState === ConferenceState.GetText) {
+      this.state = newState;
+    } else {
+      this.state = ConferenceState.Default;
+    }
+    this.translation = "";
   }
 
   async create(conferenceName: string, organizatorName: string): Promise<void> {
@@ -29,9 +46,10 @@ export class ConferenceComponent implements OnInit {
     let conference = await this.conferenceService.createConference(conferenceName, organizatorName);
     if (conference === null) {
       alert("Ошибка во время создания конференции");
+    } else {
+      this.router.navigate(["/room"]);
     }
     this.loading(false);
-    this.router.navigate(["/room"]);;
   }
 
   async join(conferenceId: string, participantName: string): Promise<void> {
@@ -40,9 +58,26 @@ export class ConferenceComponent implements OnInit {
     console.log(conference);
     if (conference === null) {
       alert("Ошибка во время подключения к конференции");
+    } else {
+      this.router.navigate(["/room"]);
     }
     this.loading(false);
-    this.router.navigate(["/room"]);
+  }
+
+  async get(conferenceId: string): Promise<void> {
+    this.loading(true);
+
+    let result = await this.conferenceService.getConferenceText(conferenceId,
+      this.isJsonType === true ? "json" : "plaintext");
+
+    if (result === null) {
+      this.translation = "Ошибка во время получения расшифровки";
+    } else {
+      console.log(result);
+      this.translation = result;
+    }
+
+    this.loading(false);
   }
 
   loading(isLoading: boolean): void {

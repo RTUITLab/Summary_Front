@@ -26,6 +26,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
@@ -63,12 +64,12 @@ import { RoomComponent } from './components/conference/room/room.component';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-
+    MatCheckboxModule,
+    
     ClipboardModule,
 
     // Google auth
     SocialLoginModule,
-
   ],
   providers: [
     MenuOptionsService,
