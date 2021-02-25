@@ -36,6 +36,7 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
 import { ConferenceService } from './services/Conference/conference.service';
 import { ConferenceComponent } from './components/conference/conference.component';
 import { RoomComponent } from './components/conference/room/room.component';
+import { ConnectConferenceComponent } from './components/conference/connect-conference/connect-conference.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { RoomComponent } from './components/conference/room/room.component';
     EditorComponent,
     AuthComponent,
     ConferenceComponent,
-    RoomComponent
+    RoomComponent,
+    ConnectConferenceComponent
   ],
   imports: [
     BrowserModule,

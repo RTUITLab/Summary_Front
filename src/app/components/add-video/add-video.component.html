@@ -49,11 +49,15 @@
                 <form>
                     <mat-form-field class="form_field" color="accent">
                         <mat-label>Минимальное количество говорящих</mat-label>
-                        <mat-select [(ngModel)]="selectedSpeaker" name="speaker">
-                            <mat-option *ngFor="let speaker of speakers" [value]="speaker.value">
-                                {{speaker.viewValue}}
-                            </mat-option>
-                        </mat-select>
+                        <input matInput type="number" [(ngModel)]="minSpeakers" min="0" name="minSpeakers">
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="options_speakers">
+                <form>
+                    <mat-form-field class="form_field" color="accent">
+                        <mat-label>Максимальное количество говорящих</mat-label>
+                        <input matInput type="number" [(ngModel)]="maxSpeakers" min="0" name="maxSpeakers">
                     </mat-form-field>
                 </form>
             </div>
@@ -76,15 +80,18 @@
                 </span>
                 <br>
                 <span>
-                    <strong>Телефонный разговор</strong> - Используйте эту модель для расшифровки аудио во время <i>телефонного</i> разговора.
+                    <strong>Телефонный разговор</strong> - Используйте эту модель для расшифровки аудио во время
+                    <i>телефонного</i> разговора.
                 </span>
                 <br>
                 <span>
-                    <strong>Командование и поиск</strong> - Используйте эту модель для расшифровки более <i>коротких</i> аудиоклипов. Наример, голосовые команды или голосовой поиск.
+                    <strong>Командование и поиск</strong> - Используйте эту модель для расшифровки более <i>коротких</i>
+                    аудиоклипов. Наример, голосовые команды или голосовой поиск.
                 </span>
                 <br>
                 <span>
-                    <strong>По умолчанию</strong> - Используйте эту модель, если ваша аудиосистема не подходит ни к одной из ранее описанных моделей. Например, <i>длинные</i> аудиозаписи.
+                    <strong>По умолчанию</strong> - Используйте эту модель, если ваша аудиосистема не подходит ни к
+                    одной из ранее описанных моделей. Например, <i>длинные</i> аудиозаписи.
                 </span>
             </div>
         </div>

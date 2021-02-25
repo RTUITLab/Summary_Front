@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AddVideoComponent } from './components/add-video/add-video.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { ConferenceComponent } from './components/conference/conference.component';
+import { ConnectConferenceComponent } from './components/conference/connect-conference/connect-conference.component';
 import { RoomComponent } from './components/conference/room/room.component';
 import { MainComponent } from './components/main/main.component';
 import { TranscriptingComponent } from './components/transcripting/transcripting.component';
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'transcript', component: TranscriptingComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'conference', component: ConferenceComponent },
-  { path: 'room', component: RoomComponent }
+  { path: 'room', component: RoomComponent },
+  { path: 'connect/conference/:conferenceId', component: ConnectConferenceComponent }
 ];
 
 @NgModule({

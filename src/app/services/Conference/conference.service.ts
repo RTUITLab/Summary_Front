@@ -64,11 +64,14 @@ export class ConferenceService {
     return null;
   }
 
-  public async endConference(conferenceId: string): Promise<boolean> {
+  public async endConference(conferenceId: string, isHost: boolean): Promise<boolean> {
     try {
+      if (!isHost) {
+        return true;
+      }
+
       let request: any = await this.http.post(environment.conferenceApiUrl +
         `finish?conference_id=${conferenceId}`, {}).toPromise();
-
       if (request.success) {
         return true;
       }

@@ -1,8 +1,15 @@
 <div *ngIf="conferenceStarted; then conferenceYes else conferenceNo"></div>
 <ng-template #conferenceYes>
-    <p>
-        {{conferenceName}} [{{conferenceId}}]
-    </p>
+    <div class="conference">
+        <p>
+            Конференция: {{conferenceName}}
+            <br>
+            Номер конференции: {{conferenceId}}
+        </p>
+        <div class="btn btn-secondary" [cdkCopyToClipboard]="linkToConnect">
+            Скопировать ссылку на подключение
+        </div>
+    </div>
     <p *ngIf='hostId && !participantId'>
         hostId: {{hostId}}
     </p>
@@ -20,7 +27,7 @@
     <audio id="player"></audio>
 </ng-template>
 <ng-template #conferenceNo>
-    <div>
+    <div class="conference_end">
         Конференция кончилась
     </div>
 </ng-template>

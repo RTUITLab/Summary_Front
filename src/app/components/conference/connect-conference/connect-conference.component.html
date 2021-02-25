@@ -1,0 +1,14 @@
+<div class="center_block">
+    <div *ngIf="isOk; then enterNameBlock else invalidBlock"></div>
+    <ng-template #enterNameBlock>
+        <input type="text" placeholder="Имя участника" #participantName>
+        <div class="btn btn-primary" (click)="join(participantName.value)">
+            Подключиться
+        </div>
+    </ng-template>
+    <ng-template #invalidBlock>
+        <div>
+            {{errorText}}
+        </div>
+    </ng-template>
+</div>

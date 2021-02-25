@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConferenceService, ConferenceTranscripts } from 'src/app/services/Conference/conference.service';
+import { ConferenceService } from 'src/app/services/Conference/conference.service';
 
 @Component({
   selector: 'app-room',
@@ -14,6 +14,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   isHost: boolean;
 
   conferenceStarted: boolean;
+  linkToConnect: string;
 
   recId: any;
   recorder: any;
@@ -23,6 +24,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.conferenceStarted = true;
+    this.linkToConnect = "";
     if (!this.conferenceService.isInConference()) {
       console.log(this.conferenceService.isInConference());
 
@@ -70,7 +72,6 @@ export class RoomComponent implements OnInit, OnDestroy {
             finalTranscriptList.splice(0, finalTranscriptList.length - 10);
           }
 
-          // var html = "";
           this.trans = [];
           finalTranscriptList.forEach(t => {
             this.trans.push({
@@ -78,32 +79,31 @@ export class RoomComponent implements OnInit, OnDestroy {
               name: t.participantName,
               value: t.value
             });
-            // html += "<p style='color:green'><b>" + t.participantName + ":</b> " + t.value + "</p>";
           })
 
           for (var participantId in interimTranscriptMap) {
             var t = interimTranscriptMap[participantId];
-            // html += "<p style='color:red'><b>" + t.participantName + ":</b> " + t.value + "</p>";
             this.trans.push({
               style: "color: red;",
               name: t.participantName,
               value: t.value
             });
           }
-
-          // this.trans = html;
         }
       }
     });
     this.recorder.startRecording();
     // release microphone on stopRecording
     this.recorder.microphone = micro;
+
+    this.linkToConnect = window.location.origin +
+      `/connect/conference/${this.conferenceId}`;
   }
 
   async end(): Promise<void> {
     // this.conferenceStarted = false;
     this.clearRecords();
-    this.conferenceStarted = !(await this.conferenceService.endConference(this.conferenceId));
+    this.conferenceStarted = !(await this.conferenceService.endConference(this.conferenceId, this.isHost));
   }
 
 

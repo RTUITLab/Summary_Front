@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -11,14 +11,19 @@ export class MediaService {
 
   public language: string;
   public modelOfRecognize: string;
-  public diarizationEnabled: boolean;
   public service: string;
+
+  public diarizationEnabled: boolean;
+  public minSpeakers: number;
+  public maxSpeakers: number;
 
   constructor(private http: HttpClient) {
     this.service = "google";
     this.language = "russian";
-    this.diarizationEnabled = false;
     this.modelOfRecognize = "default";
+    this.diarizationEnabled = false;
+    this.minSpeakers = 0;
+    this.maxSpeakers = 0;
   }
 
   extractAudio() {
@@ -42,7 +47,7 @@ export class MediaService {
   }
 
   async sendFile() {
-    let blob: Blob
+    let blob: Blob;
     if (this.mediaType === MediaType.LocalAudio) {
       blob = await fetch(this.url).then(async r => await r.blob());
     }
@@ -50,20 +55,78 @@ export class MediaService {
       blob = await this.extractAudio();
     }
 
+    console.log(`file size = ${blob.size} bytes`);
     console.log(URL.createObjectURL(blob));
 
-    const data = new FormData();
-    data.append('file', blob);
-    data.append('service', `${this.service}`);
-    data.append('diarizationEnabled', `${this.diarizationEnabled}`);
-    data.append('model', `${this.modelOfRecognize}`);
+    if (this.isBigFile(blob)) {
+      console.log(`file is big`);
+      try {
+        let request = await this.http.post<any>(environment.apiUrl + `generate_upload_url?service=${this.service}`, {}).toPromise();
+        if (request.success) {
+          console.log("start uploading file");
+          console.log(request.url);
+          let upload_request = await this.http.put<any>(request.url, blob, {
+            headers: new HttpHeaders({
+              "Content-Type": ""
+            })
+          }).toPromise();
+          if (!upload_request.ok) {
+            console.log("Error while uploading file to google service");
+            return null;
+          }
+          console.log("end uploading file");
 
-    try {
-      return (await <any>this.http.post(environment.apiUrl + 'upload', data).toPromise()).transcribeId;
-    } catch (e) {
-      console.log(e);
-      return null;
+          let params = `transcribe_id=${request.transcribeId}&model=${this.modelOfRecognize}&`;
+          if (this.diarizationEnabled) {
+            params += `diarization_enabled=${this.diarizationEnabled}&`;
+            params += `min_speaker_count =${this.minSpeakers}&`;
+            params += `max_speaker_count =${this.maxSpeakers}`;
+          } else {
+            params += `diarization_enabled=${this.diarizationEnabled}`;
+          }
+          let start_request = await this.http.post<any>(environment.apiUrl +
+            `start?${params}`, {}).toPromise();
+
+          if (start_request.success) {
+            return request.transcribeId;
+          } else {
+            return null;
+          }
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
+    } else {
+      console.log(`file is small`);
+      const data = new FormData();
+      data.append('file', blob);
+      data.append('service', `${this.service}`);
+      if (this.diarizationEnabled) {
+        data.append('diarizationEnabled', `${this.diarizationEnabled}`);
+        data.append('minSpeakerCount', `${this.minSpeakers}`);
+        data.append('maxSpeakerCount', `${this.maxSpeakers}`);
+      } else {
+        data.append('diarizationEnabled', `${this.diarizationEnabled}`);
+      }
+      data.append('model', `${this.modelOfRecognize}`);
+
+      try {
+        return (await <any>this.http.post(environment.apiUrl + 'upload', data).toPromise()).transcribeId;
+      } catch (e) {
+        console.log(e);
+        return null;
+      }
     }
+
+    return null;
+  }
+
+  isBigFile(blob: Blob): boolean {
+    // 33554432 bytes = 32 Mb
+    return blob.size > 30000000;
   }
 }
 
