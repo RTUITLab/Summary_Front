@@ -101,14 +101,12 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   async end(): Promise<void> {
-    // this.conferenceStarted = false;
     this.clearRecords();
     this.conferenceStarted = !(await this.conferenceService.endConference(this.conferenceId, this.isHost));
   }
 
-
-  ngOnDestroy(): void {
-    this.clearRecords();
+  async ngOnDestroy(): Promise<void> {
+    await this.end();
   }
 
   clearRecords(): void {
