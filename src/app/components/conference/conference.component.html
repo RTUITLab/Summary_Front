@@ -1,0 +1,49 @@
+<div class="center_block">
+    <div class="btn btn-secondary" *ngIf="state !== conferenceState.Default" (click)="changeState(conferenceState.Default)"
+        style="margin-bottom: 50px;">
+        Назад
+    </div>
+    <div *ngIf="state === conferenceState.Default">
+        <div class="btn btn-primary" (click)="changeState(conferenceState.Create)">
+            Создать конференцию
+        </div>
+        <div class="btn btn-primary" (click)="changeState(conferenceState.Join)">
+            Подключиться к конференции
+        </div>
+        <div class="btn btn-secondary" (click)="changeState(conferenceState.GetText)" style="margin-top: 50px;">
+            Получить расшифровку
+        </div>
+    </div>
+    <div *ngIf="state === conferenceState.Create">
+        <input type="text" placeholder="Название конференции" #conferenceName>
+        <input type="text" placeholder="Имя организатора" #organizatorName>
+        <div class="btn btn-primary" (click)="create(conferenceName.value, organizatorName.value)">
+            Создать
+        </div>
+    </div>
+    <div *ngIf="state === conferenceState.Join">
+        <input type="text" placeholder="Номер конференции" #conferenceId>
+        <input type="text" placeholder="Имя участника" #participantName>
+        <div class="btn btn-primary" (click)="join(conferenceId.value, participantName.value)">
+            Подключиться
+        </div>
+    </div>
+    <div *ngIf="state === conferenceState.GetText">
+        <div *ngIf="translation; then translationBlock else getTranslationBlock"></div>
+        <ng-template #getTranslationBlock>
+            <input type="text" placeholder="Номер конференции" #conferenceId>
+            <!-- <mat-checkbox color="accent" [(ngModel)]="isJsonType">JSON формат (рекомендуется)</mat-checkbox> -->
+            <div class="btn btn-primary" (click)="get(conferenceId.value)">
+                Получить расшифровку
+            </div>
+        </ng-template>
+        <ng-template #translationBlock>
+            <div [cdkCopyToClipboard]="translation" class="btn btn-secondary">Скопировать расшифровку в буфер обмена
+            </div>
+            {{translation}}
+        </ng-template>
+    </div>
+    <div *ngIf="isLoading" class="progress">
+        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+    </div>
+</div>

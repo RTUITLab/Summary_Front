@@ -26,12 +26,17 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Google auth
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
+import { ConferenceService } from './services/Conference/conference.service';
+import { ConferenceComponent } from './components/conference/conference.component';
+import { RoomComponent } from './components/conference/room/room.component';
+import { ConnectConferenceComponent } from './components/conference/connect-conference/connect-conference.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +48,10 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
     TranscriptingComponent,
     VideoComponent,
     EditorComponent,
-    AuthComponent
+    AuthComponent,
+    ConferenceComponent,
+    RoomComponent,
+    ConnectConferenceComponent
   ],
   imports: [
     BrowserModule,
@@ -58,18 +66,19 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-
+    MatCheckboxModule,
+    
     ClipboardModule,
 
     // Google auth
     SocialLoginModule,
-
   ],
   providers: [
     MenuOptionsService,
     MediaService,
     TextService,
     AuthService,
+    ConferenceService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

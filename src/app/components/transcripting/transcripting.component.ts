@@ -91,7 +91,7 @@ export class TranscriptingComponent implements OnInit, OnDestroy {
       stream.getAudioTracks().forEach(T => T.stop());
 
       if (this.isRecording) {
-        rec.exportWAV((blob) => {
+        rec.exportWAV((blob: Blob) => {
           this.isRecording = false;
           this.recognizeSpeech(blob, true);
         });

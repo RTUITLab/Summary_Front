@@ -1,0 +1,17 @@
+.conference {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    align-items: center;
+}
+
+.conference_end {
+    width: fit-content;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.paddings {
+    padding: 15px 10px 0px 10px;
+}

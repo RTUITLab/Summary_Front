@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss']
+  styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, OnDestroy {
   text: string;
@@ -14,16 +14,19 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private disableEditorId;
 
-  constructor(private textService: TextService) { }
+  constructor(private textService: TextService) {}
 
   ngOnInit(): void {
     this.disableEditor();
 
-    document.addEventListener("updateHighlights", (e) => {
-      this.currentTime = e["detail"]["currentTime"];
+    document.addEventListener('updateHighlights', (e) => {
+      this.currentTime = e['detail']['currentTime'];
 
-      (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0))
-        .contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
+      (<HTMLIFrameElement>(
+        document.getElementsByClassName('tox-edit-area__iframe').item(0)
+      )).contentWindow.document.body.dispatchEvent(
+        new Event('loadtext', { bubbles: false })
+      );
     });
   }
 
@@ -33,13 +36,17 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private async disableEditor() {
     this.disableEditorId = setInterval(() => {
-      let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+      let editor = <HTMLIFrameElement>(
+        document.getElementsByClassName('tox-edit-area__iframe').item(0)
+      );
       if (editor) {
-        let editorBody = editor.contentWindow.document.getElementById('tinymce');
+        let editorBody = editor.contentWindow.document.getElementById(
+          'tinymce'
+        );
         if (editorBody) {
-          editor.contentWindow.document.head.innerHTML += '<style>*:focus { outline: none; }</style>';
-          console.log(editor.contentWindow.document.head.innerHTML);
-          editorBody.contentEditable = 'false';
+          // editor.contentWindow.document.head.innerHTML += '<style>*:focus { outline: none; }</style>';
+          // console.log(editor.contentWindow.document.head.innerHTML);
+          // editorBody.contentEditable = 'false';
           clearInterval(this.disableEditorId);
 
           document.addEventListener('playerready', () => {
@@ -49,8 +56,12 @@ export class EditorComponent implements OnInit, OnDestroy {
           editorBody.innerHTML = this.text;
 
           editorBody.addEventListener('loadtext', () => {
-            let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
-            let editorBody = editor.contentWindow.document.getElementById('tinymce');
+            let editor = <HTMLIFrameElement>(
+              document.getElementsByClassName('tox-edit-area__iframe').item(0)
+            );
+            let editorBody = editor.contentWindow.document.getElementById(
+              'tinymce'
+            );
 
             this.text = this.textService.getFormatedText(this.currentTime);
             editorBody.innerHTML = this.text;
@@ -59,10 +70,10 @@ export class EditorComponent implements OnInit, OnDestroy {
             document.dispatchEvent(e);
 
             if (this.id === null) {
-              console.log("text was loaded - convert text to model")
+              console.log('text was loaded - convert text to model');
               this.startAutoSave();
             }
-          })
+          });
         }
       }
     }, 100);
@@ -73,23 +84,56 @@ export class EditorComponent implements OnInit, OnDestroy {
   private startAutoSave(): void {
     clearInterval(this.timerId);
     this.timerId = setInterval(() => {
-      let e = new CustomEvent("updateAutoSave", {
+      let e = new CustomEvent('updateAutoSave', {
         detail: {
-          timeRemaining: this.getRemainingTime()
-        }
-      })
+          timeRemaining: this.getRemainingTime(),
+        },
+      });
       document.dispatchEvent(e);
     }, 1000);
 
-    this.autoSaveStartTime = (new Date()).getTime();
+    this.autoSaveStartTime = new Date().getTime();
     this.id = setInterval(() => {
-      let editor = <HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0);
+      let editor = <HTMLIFrameElement>(
+        document.getElementsByClassName('tox-edit-area__iframe').item(0)
+      );
 
-      console.log(this.textService.convertTextToModel(
-        editor.contentWindow.document.getElementsByClassName('time'),
-        editor.contentWindow.document.getElementsByClassName('author'),
-        editor.contentWindow.document.getElementsByClassName('text'),
-      ));
+      let docs = editor.contentWindow.document.querySelectorAll('[data-container]');
+      console.log(docs);
+
+      let times = [];
+      let authors = [];
+      let texts = [];
+      let pattern = /<div class="(time|author|text)[a-zA-Z=" -:;\n]*>([^<]*)<\/div>/gi;
+      for (let i = 0; i < docs.length; i++) {
+        let elems = [...docs[i].innerHTML['matchAll'](pattern)];
+
+        elems.forEach(e => {
+          if (e[1] === "time") {
+            times.push(e[2])
+          } else if (e[1] === "author") {
+            authors.push(e[2])
+          } else if (e[1] === "text") {
+            texts.push(e[2])
+          }
+        });
+
+        let ml = Math.max(times.length, authors.length, texts.length);
+        if (times.length !== ml || authors.length !== ml || texts.length !== ml) {
+          if (times.length < ml) {
+            times.push("00:00:00 00:00:00");
+          }
+          if (authors.length < ml) {
+            // authors.push("Говорящий не определён");
+            authors.push("-1");
+          }
+          if (texts.length < ml) {
+            texts.push("Нет расшифровки");
+          }
+        }
+      }
+
+      console.log(this.textService.convertTextToModel(times, authors, texts));
 
       this.text = this.textService.getFormatedText(this.currentTime);
       let editorBody = editor.contentWindow.document.getElementById('tinymce');
@@ -104,24 +148,23 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public getRemainingTime() {
-    return 20000 - ((new Date()).getTime() - this.autoSaveStartTime);
+    return 20000 - (new Date().getTime() - this.autoSaveStartTime);
   }
 
-  public print(): void {
-    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+  // public print(): void {
+  //   var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-    mywindow.document.write('<html><head></head><body>');
-    mywindow.document.write(document.getElementById('tinymce').innerHTML);
-    mywindow.document.write('</body></html>');
-    document.getElementsByClassName('s');
-    mywindow.document.close(); // necessary for IE >= 10
-    mywindow.focus(); // necessary for IE >= 10
+  //   mywindow.document.write('<html><head></head><body>');
+  //   mywindow.document.write(document.getElementById('tinymce').innerHTML);
+  //   mywindow.document.write('</body></html>');
+  //   document.getElementsByClassName('s');
+  //   mywindow.document.close(); // necessary for IE >= 10
+  //   mywindow.focus(); // necessary for IE >= 10
 
-    mywindow.print();
-  }
+  //   mywindow.print();
+  // }
 
-  public change() {
-  }
+  public change() {}
 
   public getApiKey(): string {
     return environment.apiKey || 'null';

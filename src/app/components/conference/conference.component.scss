@@ -1,0 +1,50 @@
+@import '../../../assets/variables.scss';
+
+.center_block {
+    height: 100%;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    > * {
+        text-align: center;
+    }
+}
+
+.btn {
+    margin: 5px;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    display: block;
+    border: 2px solid $accent-red;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    caret-color: $accent-red;
+    color: $accent-red;
+
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.progress {
+    margin-left: auto;
+    margin-right: auto;
+    width: 30vw;
+    margin-top: 5vh;
+}
+
+mat-checkbox {
+    color: $accent-red;
+    margin: 10px 0px 15px 0px;
+}

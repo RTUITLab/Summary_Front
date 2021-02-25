@@ -24,12 +24,8 @@ export class AddVideoComponent implements OnInit {
   ];
   selectedType: string;
   // Change the value to real
-  speakers: any[] = [
-    { value: false, viewValue: 'Автоматически' },
-    { value: false, viewValue: '2' },
-    { value: false, viewValue: '3' },
-  ];
-  selectedSpeaker: boolean;
+  minSpeakers: number = 1;
+  maxSpeakers: number = 3;
   // Change the value to real
   services: any[] = [
     { value: 'google', viewValue: 'Гугл' },
@@ -44,7 +40,6 @@ export class AddVideoComponent implements OnInit {
   ) { 
     this.selectedLanguage = this.languages[0].value;
     this.selectedType = this.types[0].value;
-    this.selectedSpeaker = this.speakers[0].value;
     this.selectedService = this.services[0].value;
   }
 
@@ -77,7 +72,17 @@ export class AddVideoComponent implements OnInit {
   setParameters(): void {
     this.mediaService.language = this.selectedLanguage;
     this.mediaService.modelOfRecognize = this.selectedType;
-    this.mediaService.diarizationEnabled = this.selectedSpeaker;
+    if (this.minSpeakers <= 0 && this.maxSpeakers <= 0) {
+      this.minSpeakers = 0;
+      this.maxSpeakers = 0;
+      this.mediaService.diarizationEnabled = false;
+      this.mediaService.minSpeakers = this.minSpeakers;
+      this.mediaService.maxSpeakers = this.maxSpeakers;
+    } else {
+      this.mediaService.diarizationEnabled = true;
+      this.mediaService.minSpeakers = this.minSpeakers;
+      this.mediaService.maxSpeakers = this.maxSpeakers;
+    }
     this.mediaService.service = this.selectedService;
   }
 }
