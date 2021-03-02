@@ -8,8 +8,10 @@ import { environment } from 'src/environments/environment';
 export class ConferenceService {
   conferenceId: string;
   hostId: string;
+  hostName: string;
   conferenceName: string;
   participantId: string;
+  participantName: string;
 
   constructor(private http: HttpClient) { }
 
@@ -22,6 +24,7 @@ export class ConferenceService {
         this.conferenceId = request.conferenceId;
         this.conferenceName = request.conferenceName;
         this.hostId = request.hostId;
+        this.hostName = request.hostName;
         return request;
       }
     } catch (error) {
@@ -41,6 +44,7 @@ export class ConferenceService {
         this.conferenceName = request.conferenceName;
         this.hostId = request.hostId;
         this.participantId = request.participantId;
+        this.participantName = request.participantName;
         return request;
       }
     } catch (error) {
@@ -113,12 +117,29 @@ export class ConferenceService {
       (!!this.hostId || !!this.participantId) &&
       !!this.conferenceName;
   }
+
+  public getParticipantId(): string {
+    if (this.participantId === undefined || this.participantId === null || this.participantId === "") {
+      return this.hostId;
+    } else {
+      return this.participantId;
+    }
+  }
+
+  public getParticipantName(): string {
+    if (this.participantName === undefined || this.participantName === null || this.participantName === "") {
+      return this.hostName;
+    } else {
+      return this.participantName;
+    }
+  }
 }
 
 export type ConferenceCreatedModel = {
   conferenceId: string,
   conferenceName: string,
   hostId: string,
+  hostName: string,
   success: boolean
 }
 
@@ -127,6 +148,7 @@ export type ConferenceParticipantJoinModel = {
   conferenceName: string,
   hostId: string,
   participantId: string,
+  participantName: string,
   success: boolean
 }
 

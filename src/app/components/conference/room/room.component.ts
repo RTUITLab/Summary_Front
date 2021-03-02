@@ -9,8 +9,10 @@ import { ConferenceService } from 'src/app/services/Conference/conference.servic
 export class RoomComponent implements OnInit, OnDestroy {
   conferenceId: string;
   hostId: string;
+  hostName: string;
   conferenceName: string;
   participantId: string;
+  participantName: string;
   isHost: boolean;
 
   conferenceStarted: boolean;
@@ -33,8 +35,10 @@ export class RoomComponent implements OnInit, OnDestroy {
     }
     this.conferenceId = this.conferenceService.conferenceId;
     this.hostId = this.conferenceService.hostId;
+    this.hostName = this.conferenceService.hostName;
     this.conferenceName = this.conferenceService.conferenceName;
-    this.participantId = this.conferenceService.participantId ? this.conferenceService.participantId : this.conferenceService.hostId;
+    this.participantId = this.conferenceService.getParticipantId();
+    this.participantName = this.conferenceService.getParticipantName();
     this.isHost = this.hostId === this.participantId;
 
     let micro = await navigator.mediaDevices.getUserMedia({ audio: true });

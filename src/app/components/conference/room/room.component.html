@@ -11,11 +11,8 @@
                 Скопировать ссылку на подключение
             </div>
         </div>
-        <p *ngIf='hostId && !participantId'>
-            hostId: {{hostId}}
-        </p>
-        <p *ngIf='participantId'>
-            participantId: {{participantId}}
+        <p>
+            Ваше имя: {{participantName}} <span *ngIf="isHost">[организатор]</span>
         </p>
 
         <div *ngFor="let tran of trans">
