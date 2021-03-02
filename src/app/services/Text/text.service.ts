@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -11,16 +11,30 @@ export class TextService {
   public duration: number;
   private id: string;
 
-  constructor(private http: HttpClient) { }
+  public isPhonexia: boolean;
+  public headersForPhonexia: HttpHeaders;
+  public fileIdPhonexia: string;
+  constructor(private http: HttpClient) {
+    this.isPhonexia = false;
+    this.headersForPhonexia = new HttpHeaders({});
+    this.fileIdPhonexia = "";
+  }
 
   public async checkStatus(id: string) {
     this.id = id;
 
-    return (await <any>this.http.get(environment.apiUrl + 'check_state?transcribe_id=' + id).toPromise()).state;
+    if (this.isPhonexia) {
+      let req = await this.http.get<any>(environment.phonexiaApiUrl + `pending/${id}`, { headers: this.headersForPhonexia }).toPromise();
+      return req.result;
+    } else {
+      let req = await <any>this.http.get(environment.apiUrl + 'check_state?transcribe_id=' + id).toPromise();
+      return req.state;
+    }
   }
 
   public async loadText(id: string): Promise<Array<TextModel>> {
-    this.text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise()).entries;
+    this.text = <Array<TextModel>>(await this.http.get<any>(environment.apiUrl + 'get?transcribe_id=' + id).toPromise())
+      .entries;
 
     this.text = this.text || [];
 
@@ -30,6 +44,19 @@ export class TextService {
       });
     }
 
+    return this.text;
+  }
+
+  public async loadTextPhonexia(text: Array<any>): Promise<Array<TextModel>> {
+    text.forEach(t => {
+      if (t.variant[0] !== null && t.variant[0] !== undefined) {
+        this.text.push({
+          time: t.variant[0].start / 10000000,
+          speakerId: "-1",
+          text: t.variant[0].phrase
+        });
+      }
+    });
     return this.text;
   }
 
@@ -68,7 +95,6 @@ export class TextService {
   }
 
   public convertTextToModel(times: any[], authors: any[], texts: any[]): Array<TextModel> {
-
     let text: Array<TextModel> = [];
 
     for (let i = 0; i < times.length; i++) {
@@ -85,8 +111,12 @@ export class TextService {
 
     this.text = text;
 
-    if (this.id) {
-      this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
+    if (this.isPhonexia) {
+      console.log("Here should be a request to save project");
+    } else {
+      if (this.id) {
+        this.http.post(environment.apiUrl + 'edit?transcribe_id=' + this.id, { entries: text }).toPromise();
+      }
     }
 
     return text;
@@ -118,7 +148,6 @@ export class TextService {
     }
     time += hours + ':';
     seconds = seconds % 3600;
-    // console.log(seconds);
 
     let minutes: number = Math.floor(seconds / 60);
     if (minutes <= 9) {

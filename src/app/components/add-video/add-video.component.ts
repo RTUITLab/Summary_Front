@@ -29,7 +29,7 @@ export class AddVideoComponent implements OnInit {
   // Change the value to real
   services: any[] = [
     { value: 'google', viewValue: 'Гугл' },
-    { value: 'AAAAAAAAAAAAAAAAAAAAAAAAA', viewValue: 'Фонексия' },
+    { value: 'phonexia', viewValue: 'Фонексия' },
   ];
   selectedService: string;
   constructor(
@@ -37,7 +37,7 @@ export class AddVideoComponent implements OnInit {
     private menuService: MenuOptionsService,
     private router: Router,
     private mediaService: MediaService
-  ) { 
+  ) {
     this.selectedLanguage = this.languages[0].value;
     this.selectedType = this.types[0].value;
     this.selectedService = this.services[0].value;
@@ -52,7 +52,7 @@ export class AddVideoComponent implements OnInit {
       this.setParameters();
       this.mediaService.mediaType = MediaType.LocalVideo;
       this.mediaService.url = URL.createObjectURL(videoInput.files[0]);
-      this.router.navigate(['/transcript']);
+      this.navigateToTransript();
     })
 
     let audioInput = <HTMLInputElement>document.getElementById('audio');
@@ -60,18 +60,20 @@ export class AddVideoComponent implements OnInit {
       this.setParameters();
       this.mediaService.mediaType = MediaType.LocalAudio;
       this.mediaService.url = URL.createObjectURL(audioInput.files[0]);
-      this.router.navigate(['/transcript']);
+      this.navigateToTransript();
     })
   }
 
   loadVoice() {
     this.mediaService.mediaType = MediaType.Voice;
-    this.router.navigate(['/transcript']);
+    this.navigateToTransript();
   }
 
   setParameters(): void {
     this.mediaService.language = this.selectedLanguage;
     this.mediaService.modelOfRecognize = this.selectedType;
+    this.mediaService.service = this.selectedService;
+
     if (this.minSpeakers <= 0 && this.maxSpeakers <= 0) {
       this.minSpeakers = 0;
       this.maxSpeakers = 0;
@@ -83,6 +85,9 @@ export class AddVideoComponent implements OnInit {
       this.mediaService.minSpeakers = this.minSpeakers;
       this.mediaService.maxSpeakers = this.maxSpeakers;
     }
-    this.mediaService.service = this.selectedService;
+  }
+
+  navigateToTransript(): void {
+    this.router.navigate(["/transcript"]);
   }
 }
