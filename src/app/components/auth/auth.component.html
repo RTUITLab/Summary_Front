@@ -3,23 +3,41 @@
     <ng-template #entering>
         <div *ngIf="isSignIn; then signin else signup"></div>
         <ng-template #signin>
-            <input type="text" placeholder="login" #login>
-            <input type="password" placeholder="password" #password>
-            <div class="btn btn-secondary" (click)="signIn(login.value, password.value)">
-                Войти
+            <div class="sign">
+                <mat-form-field color="accent">
+                    <mat-label>Логин</mat-label>
+                    <input matInput placeholder="Логин">
+                </mat-form-field>
+                <mat-form-field color="accent">
+                    <mat-label>Пароль</mat-label>
+                    <input matInput placeholder="Пароль" type="password">
+                </mat-form-field>
+                <div class="btn btn-primary help_padding">
+                    Войти
+                </div>
+                <div class="help">
+                    <span>
+                        Забыли пароль?
+                    </span>
+                </div>
+                <div class="help" (click)="isSignIn = false">
+                    <span>
+                        Зарегистрироваться
+                    </span>
+                </div>
             </div>
-            <div class="btn btn-primary" (click)="isSignIn = false" style="margin-top: 40px;">
-                Зарегистрироваться
-            </div>
-            <div class="btn btn-secondary" (click)="signInWithGoogle()" style="margin-top: 40px;">
-                Войти через Google
-            </div>
-            <div class="btn btn-secondary" (click)="signInWithVk()">
-                Войти через Vk
-            </div>
-            <div class="btn btn-secondary" >
-                <a href="https://github.com/login/oauth/authorize?client_id=d69e73d6db9391f25ba4">Войти через Github</a>
-            </div>
+            <!-- <div>
+                <div class="btn btn-secondary" (click)="signInWithGoogle()" style="margin-top: 40px;">
+                    Войти через Google
+                </div>
+                <div class="btn btn-secondary" (click)="signInWithVk()">
+                    Войти через Vk
+                </div>
+                <div class="btn btn-secondary">
+                    <a href="https://github.com/login/oauth/authorize?client_id=d69e73d6db9391f25ba4">Войти через
+                        Github</a>
+                </div>
+            </div> -->
         </ng-template>
         <ng-template #signup>
             <div class="btn btn-secondary" (click)="isSignIn = true">Уже есть аккаунт</div>

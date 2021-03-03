@@ -16,10 +16,21 @@
         <div *ngIf="user" class="user-avatar" routerLink="/auth">
             <img [src]="user.photoUrl" class="image">
         </div>
-        <div class="btn btn-primary" routerLink="/auth">
+        <div>
             <div *ngIf="user; then username else entername"></div>
-            <ng-template #username>Аккаунт</ng-template>
-            <ng-template #entername>Войти</ng-template>
+            <ng-template #username>
+                <div class="btn btn-primary" routerLink="/auth">
+                    Аккаунт
+                </div>
+            </ng-template>
+            <ng-template #entername>
+                <div class="btn btn-primary btn-enter" routerLink="/auth">
+                    Войти
+                </div>
+                <div class="btn-light btn-enter-with" routerLink="/auth/with">
+                    Войти с помощью
+                </div>
+            </ng-template>
         </div>    <!-- TODO: Different buttons-->
     </div>
 </div>
