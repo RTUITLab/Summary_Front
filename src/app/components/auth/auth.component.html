@@ -1,33 +1,41 @@
 <div class="center_block">
     <div *ngIf="user; then profile else entering"></div>
     <ng-template #entering>
-        <div *ngIf="isSignIn; then signin else signup"></div>
-        <ng-template #signin>
-            <div class="sign">
-                <mat-form-field color="accent">
-                    <mat-label>Логин</mat-label>
-                    <input matInput placeholder="Логин">
-                </mat-form-field>
-                <mat-form-field color="accent">
-                    <mat-label>Пароль</mat-label>
-                    <input matInput placeholder="Пароль" type="password">
-                </mat-form-field>
-                <div class="btn btn-primary help_padding">
-                    Войти
+        <div *ngIf="isEnterWith; then enterWith else enter"></div>
+        <ng-template #enter>
+            <div *ngIf="isSignIn; then signin else signup"></div>
+            <ng-template #signin>
+                <div class="sign">
+                    <mat-form-field color="accent">
+                        <mat-label>Логин</mat-label>
+                        <input matInput placeholder="Логин">
+                    </mat-form-field>
+                    <mat-form-field color="accent">
+                        <mat-label>Пароль</mat-label>
+                        <input matInput placeholder="Пароль" type="password">
+                    </mat-form-field>
+                    <div class="btn btn-primary help_padding">
+                        Войти
+                    </div>
+                    <div class="help">
+                        <span>
+                            Забыли пароль?
+                        </span>
+                    </div>
+                    <div class="help" (click)="isSignIn = false">
+                        <span>
+                            Зарегистрироваться
+                        </span>
+                    </div>
                 </div>
-                <div class="help">
-                    <span>
-                        Забыли пароль?
-                    </span>
-                </div>
-                <div class="help" (click)="isSignIn = false">
-                    <span>
-                        Зарегистрироваться
-                    </span>
-                </div>
-            </div>
-            <!-- <div>
-                <div class="btn btn-secondary" (click)="signInWithGoogle()" style="margin-top: 40px;">
+            </ng-template>
+            <ng-template #signup>
+                <div class="btn btn-secondary" (click)="isSignIn = true">Уже есть аккаунт</div>
+            </ng-template>
+        </ng-template>
+        <ng-template #enterWith>
+            <div>
+                <div class="btn btn-secondary" (click)="signInWithGoogle()">
                     Войти через Google
                 </div>
                 <div class="btn btn-secondary" (click)="signInWithVk()">
@@ -37,10 +45,7 @@
                     <a href="https://github.com/login/oauth/authorize?client_id=d69e73d6db9391f25ba4">Войти через
                         Github</a>
                 </div>
-            </div> -->
-        </ng-template>
-        <ng-template #signup>
-            <div class="btn btn-secondary" (click)="isSignIn = true">Уже есть аккаунт</div>
+            </div>
         </ng-template>
     </ng-template>
     <ng-template #profile>

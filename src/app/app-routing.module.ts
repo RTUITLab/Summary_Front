@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', component: MainComponent },
   { path: 'upload', component: AddVideoComponent },
   { path: 'transcript', component: TranscriptingComponent },
-  { path: 'auth', component: AuthComponent },
+  { path: 'auth/:with', component: AuthComponent },
   { path: 'conference', component: ConferenceComponent },
   { path: 'room', component: RoomComponent },
   { path: 'connect/conference/:conferenceId', component: ConnectConferenceComponent }
