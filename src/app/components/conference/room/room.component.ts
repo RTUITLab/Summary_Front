@@ -102,7 +102,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.recorder.microphone = micro;
 
     this.linkToConnect = window.location.origin +
-      `/connect/conference/${this.conferenceId}`;
+      `/#/connect/conference/${this.conferenceId}`;
   }
 
   async end(): Promise<void> {
