@@ -45,22 +45,42 @@ export class TranscriptingComponent implements OnInit, OnDestroy {
 
     if (this.mediaService.mediaType === MediaType.LocalAudio || this.mediaService.mediaType === MediaType.LocalVideo) {
       this.transpId = await this.mediaService.sendFile();
-      if (this.transpId === null) {
-        console.log("request failed");
-        this.loadingChange(false, true);
-      }
 
-      this.checkStatusId = setInterval(async () => {
-        if ((await this.textService.checkStatus(this.transpId)) === 'READY') {
-          clearInterval(this.checkStatusId);
+      this.textService.isPhonexia = this.mediaService.isPhonexia();
+      if (this.textService.isPhonexia) {
+        this.textService.headersForPhonexia = this.mediaService.headersForPhonexia;
+        this.checkStatusId = setInterval(async () => {
+          let result = await this.textService.checkStatus(this.transpId);
+          if (result.name !== "PendingInfoResult") {
+            clearInterval(this.checkStatusId);
 
-          await this.textService.loadText(this.transpId);
+            console.log(result);
+            
+            await this.textService.loadTextPhonexia(result.n_best_result.phrase_variants);
 
-          (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
+            (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
 
-          this.loadingChange(false);
+            this.loadingChange(false);
+          }
+        }, 5000);
+      } else {
+        if (this.transpId === null) {
+          console.log("request failed");
+          this.loadingChange(false, true);
         }
-      }, 1000);
+
+        this.checkStatusId = setInterval(async () => {
+          if (await this.textService.checkStatus(this.transpId) === 'READY') {
+            clearInterval(this.checkStatusId);
+
+            await this.textService.loadText(this.transpId);
+
+            (<HTMLIFrameElement>document.getElementsByClassName('tox-edit-area__iframe').item(0)).contentWindow.document.body.dispatchEvent(new Event('loadtext', { bubbles: false }));
+
+            this.loadingChange(false);
+          }
+        }, 1000);
+      }
     }
     else {
       this.loadingChange(false);

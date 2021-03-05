@@ -14,7 +14,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private disableEditorId;
 
-  constructor(private textService: TextService) {}
+  constructor(private textService: TextService) { }
 
   ngOnInit(): void {
     this.disableEditor();
@@ -119,17 +119,15 @@ export class EditorComponent implements OnInit, OnDestroy {
         });
 
         let ml = Math.max(times.length, authors.length, texts.length);
-        if (times.length !== ml || authors.length !== ml || texts.length !== ml) {
-          if (times.length < ml) {
-            times.push("00:00:00 00:00:00");
-          }
-          if (authors.length < ml) {
-            // authors.push("Говорящий не определён");
-            authors.push("-1");
-          }
-          if (texts.length < ml) {
-            texts.push("Нет расшифровки");
-          }
+        if (times.length < ml) {
+          times.push("00:00:00 00:00:00");
+        }
+        if (authors.length < ml) {
+          // authors.push("Говорящий не определён");
+          authors.push("-1");
+        }
+        if (texts.length < ml) {
+          texts.push("Нет расшифровки");
         }
       }
 
@@ -151,20 +149,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     return 20000 - (new Date().getTime() - this.autoSaveStartTime);
   }
 
-  // public print(): void {
-  //   var mywindow = window.open('', 'PRINT', 'height=400,width=600');
-
-  //   mywindow.document.write('<html><head></head><body>');
-  //   mywindow.document.write(document.getElementById('tinymce').innerHTML);
-  //   mywindow.document.write('</body></html>');
-  //   document.getElementsByClassName('s');
-  //   mywindow.document.close(); // necessary for IE >= 10
-  //   mywindow.focus(); // necessary for IE >= 10
-
-  //   mywindow.print();
-  // }
-
-  public change() {}
+  public change() { }
 
   public getApiKey(): string {
     return environment.apiKey || 'null';

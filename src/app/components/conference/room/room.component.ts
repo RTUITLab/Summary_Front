@@ -9,8 +9,10 @@ import { ConferenceService } from 'src/app/services/Conference/conference.servic
 export class RoomComponent implements OnInit, OnDestroy {
   conferenceId: string;
   hostId: string;
+  hostName: string;
   conferenceName: string;
   participantId: string;
+  participantName: string;
   isHost: boolean;
 
   conferenceStarted: boolean;
@@ -20,11 +22,12 @@ export class RoomComponent implements OnInit, OnDestroy {
   recorder: any;
 
   trans: any[];
+  translation: string;
   constructor(private conferenceService: ConferenceService) { }
 
   async ngOnInit(): Promise<void> {
     this.conferenceStarted = true;
-    this.linkToConnect = "";
+    this.linkToConnect = this.translation = "";
     if (!this.conferenceService.isInConference()) {
       console.log(this.conferenceService.isInConference());
 
@@ -33,8 +36,10 @@ export class RoomComponent implements OnInit, OnDestroy {
     }
     this.conferenceId = this.conferenceService.conferenceId;
     this.hostId = this.conferenceService.hostId;
+    this.hostName = this.conferenceService.hostName;
     this.conferenceName = this.conferenceService.conferenceName;
-    this.participantId = this.conferenceService.participantId ? this.conferenceService.participantId : this.conferenceService.hostId;
+    this.participantId = this.conferenceService.getParticipantId();
+    this.participantName = this.conferenceService.getParticipantName();
     this.isHost = this.hostId === this.participantId;
 
     let micro = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -75,7 +80,7 @@ export class RoomComponent implements OnInit, OnDestroy {
           this.trans = [];
           finalTranscriptList.forEach(t => {
             this.trans.push({
-              style: "color: green;",
+              style: "color: black;",
               name: t.participantName,
               value: t.value
             });
@@ -84,7 +89,7 @@ export class RoomComponent implements OnInit, OnDestroy {
           for (var participantId in interimTranscriptMap) {
             var t = interimTranscriptMap[participantId];
             this.trans.push({
-              style: "color: red;",
+              style: "color: #aaa;",
               name: t.participantName,
               value: t.value
             });
@@ -97,12 +102,24 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.recorder.microphone = micro;
 
     this.linkToConnect = window.location.origin +
-      `/connect/conference/${this.conferenceId}`;
+      `/#/connect/conference/${this.conferenceId}`;
   }
 
   async end(): Promise<void> {
     this.clearRecords();
     this.conferenceStarted = !(await this.conferenceService.endConference(this.conferenceId, this.isHost));
+    await this.getConferenceTranslation();
+  }
+
+  async getConferenceTranslation (): Promise<void> {
+    let result = await this.conferenceService.getConferenceText(this.conferenceId, "json");
+
+    if (result === null) {
+      this.translation = "Ошибка во время получения расшифровки";
+    } else {
+      console.log(result);
+      this.translation = result.replace("\n", "<br>");
+    }
   }
 
   async ngOnDestroy(): Promise<void> {

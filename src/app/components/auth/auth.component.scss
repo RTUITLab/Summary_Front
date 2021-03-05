@@ -10,35 +10,39 @@
     transform: translate(-50%, -60%);
     height: 50%;
     width: 100%;
-    background: linear-gradient(130deg, $gradient-red 55%, $gradient-blue 75%);
-    background-repeat: no-repeat;
-    box-shadow: 0px -2px 4px 0px rgba(160, 160, 160, 0.33), 0px 2px 4px 0px rgba(160, 160, 160, 0.33);
     
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    background: linear-gradient(130deg, $gradient-red 55%, $gradient-blue 75%);
+    background-repeat: no-repeat;
+    box-shadow: 0px -2px 4px 0px rgba(160, 160, 160, 0.33), 0px 2px 4px 0px rgba(160, 160, 160, 0.33);
 }
 
-input {
-    display: block;
-    border: 2px solid $accent-blue;
-    border-radius: 5px;
-    padding: 10px;
-    font-family: "Montserrat", sans-serif;
-    font-size: 18px;
-    caret-color: $accent-blue;
-    color: $accent-blue;
+// input {
+//     display: block;
+//     border: 2px solid $accent-blue;
+//     border-radius: 5px;
+//     padding: 10px;
+//     font-family: "Montserrat", sans-serif;
+//     font-size: 18px;
+//     caret-color: $accent-blue;
+//     color: $accent-blue;
 
-    margin: 5px;
-    margin-left: auto;
-    margin-right: auto;
-}
+//     margin: 5px;
+//     margin-left: auto;
+//     margin-right: auto;
+// }
 
 .btn {
     margin: 5px;
 
     margin-left: auto;
     margin-right: auto;
+
+    width: 200px;
+    text-align: center;
 
     > a {
         text-decoration: none;
@@ -47,5 +51,38 @@ input {
         &:visited {
             color: $accent-blue;
         }
+    }
+}
+
+.sign {
+    box-shadow: 0px -2px 4px 0px rgba(160, 160, 160, 0.33), 0px 2px 4px 0px rgba(160, 160, 160, 0.33);
+    background-color: white;
+    border-radius: 5px;
+    width: 390px;
+    margin: 0 auto;
+    padding: 30px 10px 30px 10px;
+
+    .help {
+        width: fit-content;
+        margin: 0 auto;
+        font-size: 0.85em;
+        color: $accent-blue;
+        opacity: 0.8;
+        cursor: pointer;
+
+        & :hover {
+            color: $accent-red;
+        }
+    }
+
+    .help_padding {
+        margin-bottom: 40px;
+    }
+
+    mat-form-field {
+        display: block;
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

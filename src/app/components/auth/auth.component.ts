@@ -12,16 +12,17 @@ import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/me
 export class AuthComponent implements OnInit {
   user: SocialUser;
   isSignIn: boolean;
+  isEnterWith: boolean;
 
   constructor(private authService: AuthService,
     private menuOptionsService: MenuOptionsService,
     private socialAuthService: SocialAuthService,
     private activatedRoute: ActivatedRoute) {
     this.isSignIn = true;
+
     this.activatedRoute.queryParams.subscribe(qparams => {
       let ghcode = qparams["code"];
-      if (ghcode !== null && ghcode !== undefined && ghcode !== "")
-      {
+      if (ghcode !== null && ghcode !== undefined && ghcode !== "") {
         this.authService.signInWithGithub(ghcode);
       }
     })
@@ -31,6 +32,18 @@ export class AuthComponent implements OnInit {
     this.menuOptionsService.setOption(MenuOptions.Auth);
     this.socialAuthService.authState.subscribe((user) => {
       this.user = user;
+    });
+
+    this.isEnterWith = false;
+    this.activatedRoute.params.subscribe(p => {
+      let isWith = p["with"];
+      console.log(isWith);
+      
+      if (isWith === "with") {
+        this.isEnterWith = true;
+      } else if (isWith === "no") {
+        this.isEnterWith = false;
+      }
     });
   }
 

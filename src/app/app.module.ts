@@ -19,6 +19,10 @@ import { FormsModule } from '@angular/forms';
 import { TextService } from './services/Text/text.service';
 import { AuthComponent } from './components/auth/auth.component';
 import { AuthService } from './services/Auth/auth.service';
+import { ConferenceService } from './services/Conference/conference.service';
+import { ConferenceComponent } from './components/conference/conference.component';
+import { RoomComponent } from './components/conference/room/room.component';
+import { ConnectConferenceComponent } from './components/conference/connect-conference/connect-conference.component';
 
 // Angular material
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,10 +37,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 // Google auth
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
-import { ConferenceService } from './services/Conference/conference.service';
-import { ConferenceComponent } from './components/conference/conference.component';
-import { RoomComponent } from './components/conference/room/room.component';
-import { ConnectConferenceComponent } from './components/conference/connect-conference/connect-conference.component';
+
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import { ConnectConferenceComponent } from './components/conference/connect-conf
     AuthComponent,
     ConferenceComponent,
     RoomComponent,
-    ConnectConferenceComponent
+    ConnectConferenceComponent,
   ],
   imports: [
     BrowserModule,

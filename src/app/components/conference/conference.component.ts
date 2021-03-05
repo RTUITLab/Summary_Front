@@ -74,7 +74,7 @@ export class ConferenceComponent implements OnInit {
       this.translation = "Ошибка во время получения расшифровки";
     } else {
       console.log(result);
-      this.translation = result;
+      this.translation = result.replace("\n", "<br>");
     }
 
     this.loading(false);

@@ -12,6 +12,7 @@ export class MediaService {
   public language: string;
   public modelOfRecognize: string;
   public service: string;
+  public headersForPhonexia: HttpHeaders;
 
   public diarizationEnabled: boolean;
   public minSpeakers: number;
@@ -19,6 +20,8 @@ export class MediaService {
 
   constructor(private http: HttpClient) {
     this.service = "google";
+    this.headersForPhonexia = new HttpHeaders({});
+
     this.language = "russian";
     this.modelOfRecognize = "default";
     this.diarizationEnabled = false;
@@ -47,6 +50,7 @@ export class MediaService {
   }
 
   async sendFile() {
+
     let blob: Blob;
     if (this.mediaType === MediaType.LocalAudio) {
       blob = await fetch(this.url).then(async r => await r.blob());
@@ -55,6 +59,9 @@ export class MediaService {
       blob = await this.extractAudio();
     }
 
+    if (this.isPhonexia()) {
+      return await this.usePhonexia(blob);
+    }
     console.log(`file size = ${blob.size} bytes`);
     console.log(URL.createObjectURL(blob));
 
@@ -124,9 +131,61 @@ export class MediaService {
     return null;
   }
 
+  async usePhonexia(blob: Blob): Promise<string> {
+    try {
+      let user = {
+        username: "Maxim Mikhalovich",
+        password: "proverka"
+      };
+      let userForAuth = window.btoa(user.username + ":" + user.password);
+
+      // Authenticate to Phonexia
+      let request = await this.http.post<any>(environment.phonexiaApiUrl + "login", {}, {
+        headers: new HttpHeaders({
+          Authorization: `Basic ${userForAuth}`
+        })
+      }).toPromise();
+      if (!request.result) {
+        return null;
+      }
+      let sessionId = request.result.session.id;
+      console.log(`sessionId = ${sessionId}`);
+      this.headersForPhonexia = new HttpHeaders({
+        "X-SessionID": sessionId
+      });
+
+      // Load file to Phonexia
+      request = await this.http.post<any>(environment.phonexiaApiUrl +
+        "audiofile?path=/recording.wav", blob, {
+        headers: this.headersForPhonexia
+      }).toPromise();
+      if (!request.result) {
+        return null;
+      }
+      return await this.startTranslatingPhonexia();
+    } catch (error) {
+      console.log(error);
+    }
+    return null;
+  }
+
+  async startTranslatingPhonexia(): Promise<string> {
+    let request = await this.http.get<any>(environment.phonexiaApiUrl +
+      "technologies/stt?path=/recording.wav&model=RU_RU_5&result_type=n_best", { headers: this.headersForPhonexia }).toPromise();
+    if (request.result.name && request.result.name === "PendingInfoResult") {
+      return request.result.info.id;
+    }
+
+    return null;
+  }
+
   isBigFile(blob: Blob): boolean {
-    // 33554432 bytes = 32 Mb
+    // 33 554 432 bytes = 32 Mb
     return blob.size > 30000000;
+  }
+
+  public isPhonexia(): boolean {
+    return this.service === "phonexia";
   }
 }
 
