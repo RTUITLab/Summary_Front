@@ -2,31 +2,31 @@
 <ng-template #conferenceYes>
     <div class="paddings">
         <div class="conference">
-            <p>
-                Конференция: {{conferenceName}}
-                <br>
-                Номер конференции: {{conferenceId}}
-            </p>
-            <div class="btn btn-secondary" [cdkCopyToClipboard]="linkToConnect">
-                Скопировать ссылку на подключение
+            <div class="conference_name">
+                <p>
+                    Конференция: {{conferenceName}} [{{conferenceId}}]
+                </p>
+                <p>
+                    Ваше имя: {{participantName}} <span *ngIf="isHost">[организатор]</span>
+                </p>
+                <div class="connect_link" [cdkCopyToClipboard]="linkToConnect">
+                    Скопировать ссылку на подключение
+                </div>
+            </div>
+            <div class="btn btn-primary conference_end" (click)="end()">
+                Завершить
             </div>
         </div>
-        <p>
-            Ваше имя: {{participantName}} <span *ngIf="isHost">[организатор]</span>
-        </p>
 
         <div *ngFor="let tran of trans">
             <p [style]="tran['style']">{{tran.name}}: {{tran.value}}</p>
         </div>
 
-        <div class="btn btn-primary" (click)="end()">
-            Завершить конференцию
-        </div>
         <audio id="player"></audio>
     </div>
 </ng-template>
 <ng-template #conferenceNo>
-    <div class="conference_end">
+    <div class="conference_none">
         Конференция кончилась
     </div>
 </ng-template>

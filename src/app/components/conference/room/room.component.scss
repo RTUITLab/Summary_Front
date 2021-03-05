@@ -1,10 +1,25 @@
+@import '../../../../assets/variables.scss';
+
 .conference {
     display: grid;
-    grid-template-columns: 30% 70%;
-    align-items: center;
+    grid-template-columns: 80% 20%;
+    align-items: start;
+
+    .conference_end {
+        justify-self: end;
+    }
 }
 
-.conference_end {
+.conference_name {
+    text-align: center;
+
+    p {
+        margin: 5px 0px;
+        font-size: 1.3em;
+    }
+}
+
+.conference_none {
     width: fit-content;
     position: absolute;
     top: 40%;
@@ -14,4 +29,17 @@
 
 .paddings {
     padding: 15px 10px 0px 10px;
+}
+
+.connect_link {
+    width: fit-content;
+    margin: 0 auto;
+    font-size: 0.8em;
+    color: $accent-blue;
+    opacity: 0.8;
+    cursor: pointer;
+
+    &:hover {
+        color: $accent-red;
+    }
 }

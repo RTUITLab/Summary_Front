@@ -79,7 +79,7 @@ export class RoomComponent implements OnInit, OnDestroy {
           this.trans = [];
           finalTranscriptList.forEach(t => {
             this.trans.push({
-              style: "color: green;",
+              style: "color: black;",
               name: t.participantName,
               value: t.value
             });
@@ -88,7 +88,7 @@ export class RoomComponent implements OnInit, OnDestroy {
           for (var participantId in interimTranscriptMap) {
             var t = interimTranscriptMap[participantId];
             this.trans.push({
-              style: "color: red;",
+              style: "color: #aaa;",
               name: t.participantName,
               value: t.value
             });
