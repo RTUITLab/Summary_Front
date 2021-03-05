@@ -26,7 +26,13 @@
     </div>
 </ng-template>
 <ng-template #conferenceNo>
-    <div class="conference_none">
-        Конференция кончилась
-    </div>
+    <div *ngIf="!conferenceStarted && translation === ''; then confNo else confTrans"></div>
+    <ng-template #confNo>
+        <div class="conference_none">
+            Конференция кончилась
+        </div>
+    </ng-template>
+    <ng-template #confTrans>
+        <div class="translation" [innerHTML]="translation"></div>
+    </ng-template>
 </ng-template>

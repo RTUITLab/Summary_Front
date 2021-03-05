@@ -22,11 +22,12 @@ export class RoomComponent implements OnInit, OnDestroy {
   recorder: any;
 
   trans: any[];
+  translation: string;
   constructor(private conferenceService: ConferenceService) { }
 
   async ngOnInit(): Promise<void> {
     this.conferenceStarted = true;
-    this.linkToConnect = "";
+    this.linkToConnect = this.translation = "";
     if (!this.conferenceService.isInConference()) {
       console.log(this.conferenceService.isInConference());
 
@@ -107,6 +108,18 @@ export class RoomComponent implements OnInit, OnDestroy {
   async end(): Promise<void> {
     this.clearRecords();
     this.conferenceStarted = !(await this.conferenceService.endConference(this.conferenceId, this.isHost));
+    await this.getConferenceTranslation();
+  }
+
+  async getConferenceTranslation (): Promise<void> {
+    let result = await this.conferenceService.getConferenceText(this.conferenceId, "json");
+
+    if (result === null) {
+      this.translation = "Ошибка во время получения расшифровки";
+    } else {
+      console.log(result);
+      this.translation = result.replace("\n", "<br>");
+    }
   }
 
   async ngOnDestroy(): Promise<void> {

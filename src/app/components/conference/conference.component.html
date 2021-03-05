@@ -38,9 +38,9 @@
             </div>
         </ng-template>
         <ng-template #translationBlock>
-            <div [cdkCopyToClipboard]="translation" class="btn btn-secondary">Скопировать расшифровку в буфер обмена
+            <div [cdkCopyToClipboard]="translation" class="copy_text">Скопировать расшифровку в буфер обмена
             </div>
-            {{translation}}
+            <div [innerHTML]="translation"></div>
         </ng-template>
     </div>
     <div *ngIf="isLoading" class="progress">
