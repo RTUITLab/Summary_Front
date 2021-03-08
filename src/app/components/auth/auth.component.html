@@ -1,64 +1,68 @@
 <div class="center_block">
-    <div *ngIf="user; then profile else entering"></div>
-    <ng-template #entering>
-        <div *ngIf="isEnterWith; then enterWith else enter"></div>
-        <ng-template #enter>
-            <div *ngIf="isSignIn; then signin else signup"></div>
-            <ng-template #signin>
-                <div class="sign">
-                    <mat-form-field color="accent">
-                        <mat-label>Логин</mat-label>
-                        <input matInput placeholder="Логин">
-                    </mat-form-field>
-                    <mat-form-field color="accent">
-                        <mat-label>Пароль</mat-label>
-                        <input matInput placeholder="Пароль" type="password">
-                    </mat-form-field>
-                    <div class="btn btn-primary help_padding">
-                        Войти
-                    </div>
-                    <div class="help">
-                        <span>
-                            Забыли пароль?
-                        </span>
-                    </div>
-                    <div class="help" (click)="isSignIn = false">
-                        <span>
-                            Зарегистрироваться
-                        </span>
-                    </div>
-                </div>
-            </ng-template>
-            <ng-template #signup>
-                <div class="btn btn-secondary" (click)="isSignIn = true">Уже есть аккаунт</div>
-            </ng-template>
-        </ng-template>
-        <ng-template #enterWith>
-            <div>
-                <div class="btn btn-secondary" (click)="signInWithGoogle()">
-                    Войти через Google
-                </div>
-                <div class="btn btn-secondary" (click)="signInWithVk()">
-                    Войти через Vk
-                </div>
-                <div class="btn btn-secondary">
-                    <a href="https://github.com/login/oauth/authorize?client_id=d69e73d6db9391f25ba4">Войти через
-                        Github</a>
-                </div>
-            </div>
-        </ng-template>
-    </ng-template>
-    <ng-template #profile>
-        <div style="text-align: center;">
-            <img [src]="user.photoUrl">
-            <br>
-            <span>{{user.name}}</span>
-            <br>
-            <span>{{user.email}}</span>
+  <div *ngIf="user; then profile; else entering"></div>
+  <ng-template #entering>
+    <div *ngIf="isEnterWith; then enterWith; else enter"></div>
+    <ng-template #enter>
+      <div *ngIf="isSignIn; then signin; else signup"></div>
+      <ng-template #signin>
+        <div class="sign">
+          <mat-form-field color="accent">
+            <mat-label>Логин</mat-label>
+            <input matInput placeholder="Логин" #loginSignIn/>
+          </mat-form-field>
+          <mat-form-field color="accent">
+            <mat-label>Пароль</mat-label>
+            <input matInput placeholder="Пароль" type="password" #passwordSignIn/>
+          </mat-form-field>
+          <div class="btn btn-primary help_padding" (click)="sign(loginSignIn.value, passwordSignIn.value)">Войти</div>
+          <div class="help">
+            <span>Забыли пароль?</span>
+          </div>
+          <div class="help" (click)="isSignIn = false">
+            <span>Создать аккаунт</span>
+          </div>
         </div>
-        <div class="btn btn-secondary" (click)="signOut()">
-            Выйти из аккаунта
+      </ng-template>
+      <ng-template #signup>
+        <div class="sign">
+          <mat-form-field color="accent">
+            <mat-label>Логин</mat-label>
+            <input matInput placeholder="Логин" #loginSignUp/>
+          </mat-form-field>
+          <mat-form-field color="accent">
+            <mat-label>Пароль</mat-label>
+            <input matInput placeholder="Пароль" type="password" #passwordSignUp/>
+          </mat-form-field>
+          <div class="btn btn-primary help_padding" (click)="sign(loginSignUp.value, passwordSignUp.value)">Зарегистрироваться</div>
+          <div class="help" (click)="isSignIn = true">Уже есть аккаунт</div>
         </div>
+      </ng-template>
     </ng-template>
-
+    <ng-template #enterWith>
+      <div>
+        <div class="btn btn-secondary" (click)="signInWithGoogle()">
+          Войти через Google
+        </div>
+        <div class="btn btn-secondary" (click)="signInWithVk()">
+          Войти через Vk
+        </div>
+        <div class="btn btn-secondary">
+          <a
+            href="https://github.com/login/oauth/authorize?client_id=d69e73d6db9391f25ba4"
+            >Войти через Github</a
+          >
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+  <ng-template #profile>
+    <div style="text-align: center">
+      <img [src]="user.photoUrl" />
+      <br />
+      <span>{{ user.name }}</span>
+      <br />
+      <span>{{ user.email }}</span>
+    </div>
+    <div class="btn btn-secondary" (click)="signOut()">Выйти из аккаунта</div>
+  </ng-template>
 </div>

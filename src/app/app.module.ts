@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { forwardRef, NgModule, Provider } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './components/root/app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -18,7 +18,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { FormsModule } from '@angular/forms';
 import { TextService } from './services/Text/text.service';
 import { AuthComponent } from './components/auth/auth.component';
-import { AuthService } from './services/Auth/auth.service';
+import { ApiInterceptor, AuthService } from './services/Auth/auth.service';
 import { ConferenceService } from './services/Conference/conference.service';
 import { ConferenceComponent } from './components/conference/conference.component';
 import { RoomComponent } from './components/conference/room/room.component';
@@ -35,9 +35,17 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // Google auth
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from 'angularx-social-login';
 import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
 
+export const API_INTERCEPTOR_PROVIDER: Provider = {
+  provide: HTTP_INTERCEPTORS,
+  useExisting: forwardRef(() => ApiInterceptor),
+  multi: true,
+};
 
 @NgModule({
   declarations: [
@@ -68,7 +76,7 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
     MatSelectModule,
     MatInputModule,
     MatCheckboxModule,
-    
+
     ClipboardModule,
 
     // Google auth
@@ -89,18 +97,18 @@ import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
               '1021497487230-qciqlan3dmg1ls237o8ddsos2v272htd.apps.googleusercontent.com'
-            )
+            ),
           },
           {
             id: VKLoginProvider.PROVIDER_ID,
-            provider: new VKLoginProvider(
-              '7750181'
-            )
-          }
-        ]
+            provider: new VKLoginProvider('7750181'),
+          },
+        ],
       } as SocialAuthServiceConfig,
-    }
+    },
+    ApiInterceptor,
+    API_INTERCEPTOR_PROVIDER,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

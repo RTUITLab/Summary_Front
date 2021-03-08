@@ -47,8 +47,20 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  signIn(login: string, password: string): void {
-
+  async sign(login: string, password: string): Promise<void> {
+    if (this.isSignIn) {
+      let token = await this.authService.signIn(login, password);
+      if (token === null) {
+        console.log("auth token is null");
+      }
+      console.log(token);
+    } else {
+      let token = await this.authService.signUp(login, password);
+      if (token === null) {
+        console.log("auth token is null");
+      }
+      console.log(token);
+    }
   }
 
   signOut(): void {
