@@ -1,36 +1,38 @@
 <div class="header">
-    <div class="logo" (click)="setOption(0)" routerLink='/'>
-        <div class="name large-header">Summary</div>
-        <div class="tagline">Your personal assistent</div>
+  <div class="logo" (click)="setOption(0)" routerLink="/">
+    <div class="name large-header">Summary</div>
+    <div class="tagline">Your personal assistent</div>
+  </div>
+  <div class="menu">
+    <div class="btn-light {{ isActive(1) }}" (click)="setOption(1)">
+      Справка
     </div>
-    <div class="menu">
-        <div class="btn-light {{isActive(1)}}" (click)="setOption(1)">Справка</div>
-        <div class="btn-light {{isActive(2)}}" (click)="setOption(2)">Язык</div>
-        <div class="btn-light {{isActive(3)}}" routerLink="/upload">Расшифровка</div>
-        <div class="btn-light {{isActive(4)}}" routerLink="/conference">Конференции</div>
-        <div class="btn-light {{isActive(5)}}" (click)="setOption(5)">
-            <img src="../../../assets/icons/Setting.svg" alt="settings" />
+    <div class="btn-light {{ isActive(2) }}" (click)="setOption(2)">Язык</div>
+    <div class="btn-light {{ isActive(3) }}" routerLink="/upload">
+      Расшифровка
+    </div>
+    <div class="btn-light {{ isActive(4) }}" routerLink="/conference">
+      Конференции
+    </div>
+    <div class="btn-light {{ isActive(5) }}" (click)="setOption(5)">
+      <img src="../../../assets/icons/Setting.svg" alt="settings" />
+    </div>
+  </div>
+  <div class="user-button">
+    <div *ngIf="user" class="user-avatar" routerLink="/auth/no">
+      <img src="../../../assets/icons/profile.png" class="image" />
+    </div>
+    <div>
+      <div *ngIf="user; then username; else entername"></div>
+      <ng-template #username>
+        <div class="btn btn-primary" routerLink="/auth/no">Аккаунт</div>
+      </ng-template>
+      <ng-template #entername>
+        <div class="btn btn-primary btn-enter" routerLink="/auth/no">Войти</div>
+        <div class="btn-light btn-enter-with" routerLink="/auth/with">
+          Войти с помощью
         </div>
+      </ng-template>
     </div>
-    <div class="user-button">
-        <div *ngIf="user" class="user-avatar" routerLink="/auth/no">
-            <img [src]="user.photoUrl" class="image">
-        </div>
-        <div>
-            <div *ngIf="user; then username else entername"></div>
-            <ng-template #username>
-                <div class="btn btn-primary" routerLink="/auth/no">
-                    Аккаунт
-                </div>
-            </ng-template>
-            <ng-template #entername>
-                <div class="btn btn-primary btn-enter" routerLink="/auth/no">
-                    Войти
-                </div>
-                <div class="btn-light btn-enter-with" routerLink="/auth/with">
-                    Войти с помощью
-                </div>
-            </ng-template>
-        </div>    <!-- TODO: Different buttons-->
-    </div>
+  </div>
 </div>

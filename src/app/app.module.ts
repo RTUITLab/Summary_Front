@@ -34,13 +34,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
-// Google auth
-import {
-  SocialLoginModule,
-  SocialAuthServiceConfig,
-} from 'angularx-social-login';
-import { GoogleLoginProvider, VKLoginProvider } from 'angularx-social-login';
-
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
   useExisting: forwardRef(() => ApiInterceptor),
@@ -78,9 +71,6 @@ export const API_INTERCEPTOR_PROVIDER: Provider = {
     MatCheckboxModule,
 
     ClipboardModule,
-
-    // Google auth
-    SocialLoginModule,
   ],
   providers: [
     MenuOptionsService,
@@ -88,24 +78,6 @@ export const API_INTERCEPTOR_PROVIDER: Provider = {
     TextService,
     AuthService,
     ConferenceService,
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '1021497487230-qciqlan3dmg1ls237o8ddsos2v272htd.apps.googleusercontent.com'
-            ),
-          },
-          {
-            id: VKLoginProvider.PROVIDER_ID,
-            provider: new VKLoginProvider('7750181'),
-          },
-        ],
-      } as SocialAuthServiceConfig,
-    },
     ApiInterceptor,
     API_INTERCEPTOR_PROVIDER,
   ],

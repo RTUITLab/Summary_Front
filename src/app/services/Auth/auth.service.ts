@@ -19,11 +19,14 @@ export class ApiInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Apply headers
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    let token = localStorage.getItem("token");
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
     return next.handle(req).pipe(
       tap(
         (x) => x,
@@ -59,7 +62,8 @@ export class AuthService {
         .toPromise();
       if (request.success) {
         localStorage.setItem("token", request.authToken);
-        return request.authToken;
+        localStorage.setItem("user", login);
+        return login;
       }
     } catch (error) {
       console.log(error);
@@ -77,10 +81,22 @@ export class AuthService {
         .toPromise();
       if (request.success) {
         localStorage.setItem("token", request.authToken);
-        return request.authToken;
+        localStorage.setItem("user", login);
+        return login;
       }
     } catch (error) {
       console.log(error);
+    }
+    return null;
+  }
+
+  isUserAuthenticated(): string {
+    let token = localStorage.getItem("token");
+    if (token) {
+      let user = localStorage.getItem("user");
+      if (user) {
+        return user;
+      }
     }
     return null;
   }

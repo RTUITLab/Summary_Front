@@ -40,28 +40,23 @@
     </ng-template>
     <ng-template #enterWith>
       <div>
-        <div class="btn btn-secondary" (click)="signInWithGoogle()">
+        <div class="btn btn-secondary">
           Войти через Google
         </div>
-        <div class="btn btn-secondary" (click)="signInWithVk()">
+        <div class="btn btn-secondary">
           Войти через Vk
         </div>
         <div class="btn btn-secondary">
-          <a
-            href="https://github.com/login/oauth/authorize?client_id=d69e73d6db9391f25ba4"
-            >Войти через Github</a
-          >
+          Войти через Github
         </div>
       </div>
     </ng-template>
   </ng-template>
   <ng-template #profile>
     <div style="text-align: center">
-      <img [src]="user.photoUrl" />
+      <img src="../../../assets/icons/profile.png" width="50px" height="50px"/>
       <br />
-      <span>{{ user.name }}</span>
-      <br />
-      <span>{{ user.email }}</span>
+      <span>Ваш Логин: {{ user }}</span>
     </div>
     <div class="btn btn-secondary" (click)="signOut()">Выйти из аккаунта</div>
   </ng-template>

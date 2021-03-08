@@ -115,7 +115,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     let result = await this.conferenceService.getConferenceText(this.conferenceId, "json");
 
     if (result === null) {
-      this.translation = "Ошибка во время получения расшифровки";
+      this.translation = `Ошибка получения расшифровки: конференция "${this.conferenceName} [${this.conferenceId}]" ещё не закончена.`;
     } else {
       console.log(result);
       this.translation = result.replace("\n", "<br>");
