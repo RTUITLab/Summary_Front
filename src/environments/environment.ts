@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   apiKey: 'dpuhlvkmuhiw4pqkz13tduq5olaaxog8vysvln1y72eehgo2',
   apiUrl: 'https://dpforge.com/2/transcribe/',
+  apiUrl1: ' https://dpforge.com/1/',
   conferenceApiUrl: 'https://dpforge.com/1/conference/',
   phonexiaApiUrl: 'http://34.121.68.229:8600/'
 };

@@ -23,7 +23,6 @@
     "@angular/platform-browser-dynamic": "~11.0.9",
     "@angular/router": "~11.0.9",
     "@tinymce/tinymce-angular": "^4.2.0",
-    "angularx-social-login": "^3.5.4",
     "recordrtc": "^5.6.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

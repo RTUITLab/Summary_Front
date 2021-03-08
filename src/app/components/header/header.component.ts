@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
-import { MenuOptions, MenuOptionsService } from 'src/app/services/MenuOptions/menu-options.service';
+import { AuthService } from 'src/app/services/Auth/auth.service';
+import {
+  MenuOptions,
+  MenuOptionsService,
+} from 'src/app/services/MenuOptions/menu-options.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  user: SocialUser;
-  constructor(private menuService: MenuOptionsService, private socialAuthService: SocialAuthService) { }
+  user: string;
+  constructor(
+    private menuService: MenuOptionsService,
+    private authService: AuthService
+  ) {}
 
   public setOption(option: MenuOptions) {
     this.menuService.setOption(option);
@@ -17,15 +23,15 @@ export class HeaderComponent implements OnInit {
 
   public isActive(option: MenuOptions) {
     if (option === this.menuService.option) {
-      return "active";
+      return 'active';
     }
-    return "";
+    return '';
   }
 
   ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((user) => {
-      this.user = user;
+    this.user = this.authService.isUserAuthenticated();
+    document.addEventListener('userlogin', () => {
+      this.user = this.authService.isUserAuthenticated();
     });
   }
-
 }
