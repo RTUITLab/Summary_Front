@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private menuService: MenuOptionsService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   public setOption(option: MenuOptions) {
     this.menuService.setOption(option);
@@ -28,10 +28,10 @@ export class HeaderComponent implements OnInit {
     return '';
   }
 
-  ngOnInit(): void {
-    this.user = this.authService.isUserAuthenticated();
-    document.addEventListener('userlogin', () => {
-      this.user = this.authService.isUserAuthenticated();
+  async ngOnInit(): Promise<void> {
+    this.user = await this.authService.isUserAuthenticated();
+    document.addEventListener('userlogin', async () => {
+      this.user = await this.authService.isUserAuthenticated();
     });
   }
 }

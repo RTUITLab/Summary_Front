@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor() { }
 
   intercept(
     req: HttpRequest<any>,
@@ -23,7 +23,7 @@ export class ApiInterceptor implements HttpInterceptor {
     if (token) {
       req = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       });
     }
@@ -31,7 +31,7 @@ export class ApiInterceptor implements HttpInterceptor {
       tap(
         (x) => x,
         (err) => {
-          console.log(err);
+          // console.log(err);
           // Handle this error
           console.error(
             `Error performing request, status code = ${err.status}`
@@ -46,11 +46,7 @@ export class ApiInterceptor implements HttpInterceptor {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
-
-  signInWithGithub(code: string): void {
-    // TODO server side authorization
-  }
+  constructor(private http: HttpClient) { }
 
   async signIn(login: string, password: string): Promise<string> {
     try {
@@ -61,7 +57,7 @@ export class AuthService {
         })
         .toPromise();
       if (request.success) {
-        localStorage.setItem("token", request.authToken);
+        localStorage.setItem("token", `${request.tokenType} ${request.accessToken}`);
         localStorage.setItem("user", login);
         return login;
       }
@@ -80,7 +76,7 @@ export class AuthService {
         })
         .toPromise();
       if (request.success) {
-        localStorage.setItem("token", request.authToken);
+        localStorage.setItem("token", `${request.tokenType} ${request.accessToken}`);
         localStorage.setItem("user", login);
         return login;
       }
@@ -90,19 +86,40 @@ export class AuthService {
     return null;
   }
 
-  isUserAuthenticated(): string {
-    let token = localStorage.getItem("token");
-    if (token) {
-      let user = localStorage.getItem("user");
-      if (user) {
-        return user;
+
+
+  async isUserAuthenticated(): Promise<string> {
+    try {
+      let current = await this.http.get<CurrentUserModel>(environment.apiUrl1 + `user/current`).toPromise();
+      if (current.success) {
+        let token = localStorage.getItem("token");
+        if (token) {
+          let user = localStorage.getItem("user");
+          if (user) {
+            return user;
+          }
+        }
       }
+    } catch (error) {
+      // console.log(error);
     }
+    this.clearCurrentUser();
     return null;
+  }
+
+  clearCurrentUser(): void {
+    localStorage.setItem("token", "");
+    localStorage.setItem("user", "");
   }
 }
 
 export type UserModel = {
   success: boolean;
-  authToken: string;
+  accessToken: string;
+  tokenType: string;
 };
+
+export type CurrentUserModel = {
+  success: boolean;
+  login: string;
+}
