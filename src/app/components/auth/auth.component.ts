@@ -22,23 +22,15 @@ export class AuthComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     this.isSignIn = true;
-
-    this.activatedRoute.queryParams.subscribe((qparams) => {
-      let ghcode = qparams['code'];
-      if (ghcode !== null && ghcode !== undefined && ghcode !== '') {
-        this.authService.signInWithGithub(ghcode);
-      }
-    });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.menuOptionsService.setOption(MenuOptions.Auth);
-    this.user = this.authService.isUserAuthenticated();
+    this.user = await this.authService.isUserAuthenticated();
 
     this.isEnterWith = false;
     this.activatedRoute.params.subscribe((p) => {
       let isWith = p['with'];
-      console.log(isWith);
 
       if (isWith === 'with') {
         this.isEnterWith = true;
@@ -51,16 +43,21 @@ export class AuthComponent implements OnInit {
   async sign(login: string, password: string): Promise<void> {
     if (this.isSignIn) {
       this.user = await this.authService.signIn(login, password);
+      let e = new Event('userlogin');
+      document.dispatchEvent(e);
     } else {
       this.user = await this.authService.signUp(login, password);
+      let e = new Event('userlogin');
+      document.dispatchEvent(e);
     }
 
-    let e = new Event('userlogin');
-    document.dispatchEvent(e);
   }
 
   async signOut(): Promise<void> {
-    localStorage.setItem('token', '');
+    this.authService.clearCurrentUser();
     this.user = null;
+
+    let e = new Event('userlogin');
+    document.dispatchEvent(e);
   }
 }
