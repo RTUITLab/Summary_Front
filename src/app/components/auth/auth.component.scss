@@ -58,6 +58,13 @@
         &:hover {
             color: $accent-red;
         }
+
+        &.error {
+            margin: -15px auto 15px auto;
+            color: $accent-red;
+            opacity: 1;
+            font-size: 0.8em;
+        }
     }
 
     .help_padding {

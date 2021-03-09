@@ -48,37 +48,43 @@ export class ApiInterceptor implements HttpInterceptor {
 export class AuthService {
   constructor(private http: HttpClient) { }
 
-  async signIn(login: string, password: string): Promise<string> {
+  async signIn(login: string, password: string): Promise<UserResponse> {
     try {
       let request = await this.http
-        .post<UserModel>(environment.apiUrl1 + `user/login`, {
+        .post<UserResponse>(environment.apiUrl1 + `user/login`, {
           login: login,
           password: password,
         })
         .toPromise();
+      request.login = login;
       if (request.success) {
         localStorage.setItem("token", `${request.tokenType} ${request.accessToken}`);
         localStorage.setItem("user", login);
-        return login;
+        return request;
+      } else {
+        return request;
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     return null;
   }
 
-  async signUp(login: string, password: string): Promise<string> {
+  async signUp(login: string, password: string): Promise<UserResponse> {
     try {
       let request = await this.http
-        .post<UserModel>(environment.apiUrl1 + `user/create`, {
+        .post<UserResponse>(environment.apiUrl1 + `user/create`, {
           login: login,
           password: password,
         })
         .toPromise();
+      request.login = login;
       if (request.success) {
         localStorage.setItem("token", `${request.tokenType} ${request.accessToken}`);
         localStorage.setItem("user", login);
-        return login;
+        return request;
+      } else {
+        return request;
       }
     } catch (error) {
       console.log(error);
@@ -122,4 +128,12 @@ export type UserModel = {
 export type CurrentUserModel = {
   success: boolean;
   login: string;
+}
+
+export type UserResponse = {
+  success: boolean;
+  login: string;
+  accessToken: string;
+  tokenType: string;
+  errorMessage: string;
 }

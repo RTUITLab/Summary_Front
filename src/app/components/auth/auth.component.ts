@@ -15,6 +15,7 @@ export class AuthComponent implements OnInit {
   user: string;
   isSignIn: boolean;
   isEnterWith: boolean;
+  errorMessage: string;
 
   constructor(
     private authService: AuthService,
@@ -27,6 +28,7 @@ export class AuthComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.menuOptionsService.setOption(MenuOptions.Auth);
     this.user = await this.authService.isUserAuthenticated();
+    this.errorMessage = "";
 
     this.isEnterWith = false;
     this.activatedRoute.params.subscribe((p) => {
@@ -42,15 +44,27 @@ export class AuthComponent implements OnInit {
 
   async sign(login: string, password: string): Promise<void> {
     if (this.isSignIn) {
-      this.user = await this.authService.signIn(login, password);
-      let e = new Event('userlogin');
-      document.dispatchEvent(e);
+      let u = await this.authService.signIn(login, password);
+      if (u.success) {
+        this.setUser(u.login);
+      } else {
+        this.errorMessage = u.errorMessage;
+      }
     } else {
-      this.user = await this.authService.signUp(login, password);
-      let e = new Event('userlogin');
-      document.dispatchEvent(e);
+      let u = await this.authService.signUp(login, password);
+      if (u.success) {
+        this.setUser(u.login);
+      } else {
+        this.errorMessage = u.errorMessage;
+      }
     }
 
+  }
+
+  setUser(login: string): void {
+    this.user = login;
+    let e = new Event('userlogin');
+    document.dispatchEvent(e);
   }
 
   async signOut(): Promise<void> {

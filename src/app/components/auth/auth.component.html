@@ -8,17 +8,21 @@
         <div class="sign">
           <mat-form-field color="accent">
             <mat-label>Логин</mat-label>
-            <input matInput placeholder="Логин" #loginSignIn/>
+            <input matInput placeholder="Логин" #loginSignIn />
           </mat-form-field>
+          <div *ngIf="errorMessage" class="help error">
+            {{errorMessage}}
+          </div>
           <mat-form-field color="accent">
             <mat-label>Пароль</mat-label>
-            <input matInput placeholder="Пароль" type="password" #passwordSignIn/>
+            <input matInput placeholder="Пароль" type="password" #passwordSignIn />
           </mat-form-field>
           <div class="btn btn-primary help_padding" (click)="sign(loginSignIn.value, passwordSignIn.value)">Войти</div>
+
           <div class="help">
             <span>Забыли пароль?</span>
           </div>
-          <div class="help" (click)="isSignIn = false">
+          <div class="help" (click)="isSignIn = false; errorMessage = ''">
             <span>Создать аккаунт</span>
           </div>
         </div>
@@ -27,14 +31,18 @@
         <div class="sign">
           <mat-form-field color="accent">
             <mat-label>Логин</mat-label>
-            <input matInput placeholder="Логин" #loginSignUp/>
+            <input matInput placeholder="Логин" #loginSignUp />
           </mat-form-field>
+          <div *ngIf="errorMessage" class="help error">
+            {{errorMessage}}
+          </div>
           <mat-form-field color="accent">
             <mat-label>Пароль</mat-label>
-            <input matInput placeholder="Пароль" type="password" #passwordSignUp/>
+            <input matInput placeholder="Пароль" type="password" #passwordSignUp />
           </mat-form-field>
-          <div class="btn btn-primary help_padding" (click)="sign(loginSignUp.value, passwordSignUp.value)">Зарегистрироваться</div>
-          <div class="help" (click)="isSignIn = true">Уже есть аккаунт</div>
+          <div class="btn btn-primary help_padding" (click)="sign(loginSignUp.value, passwordSignUp.value)">
+            Зарегистрироваться</div>
+          <div class="help" (click)="isSignIn = true; errorMessage = ''">Уже есть аккаунт</div>
         </div>
       </ng-template>
     </ng-template>
@@ -54,7 +62,7 @@
   </ng-template>
   <ng-template #profile>
     <div style="text-align: center">
-      <img src="../../../assets/icons/profile.png" width="50px" height="50px"/>
+      <img src="../../../assets/icons/profile.png" width="50px" height="50px" />
       <br />
       <span>Ваш Логин: {{ user }}</span>
     </div>
