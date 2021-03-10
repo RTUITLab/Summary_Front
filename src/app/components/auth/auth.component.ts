@@ -74,4 +74,9 @@ export class AuthComponent implements OnInit {
     let e = new Event('userlogin');
     document.dispatchEvent(e);
   }
+
+  signInWith(): void {
+    alert("Временно не работает");
+    console.log("Ждём реализации на бэкенде - 'Вход через другие сервисы'");
+  }
 }

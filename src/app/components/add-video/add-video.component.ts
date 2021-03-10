@@ -52,7 +52,9 @@ export class AddVideoComponent implements OnInit {
       this.setParameters();
       this.mediaService.mediaType = MediaType.LocalVideo;
       this.mediaService.url = URL.createObjectURL(videoInput.files[0]);
-      this.navigateToTransript();
+      alert("Вы загрузили видео");
+      console.log("Ждём реализации на фронте - 'Красивое отображение нотификаций'");
+      // this.navigateToTransript();
     })
 
     let audioInput = <HTMLInputElement>document.getElementById('audio');
@@ -60,13 +62,22 @@ export class AddVideoComponent implements OnInit {
       this.setParameters();
       this.mediaService.mediaType = MediaType.LocalAudio;
       this.mediaService.url = URL.createObjectURL(audioInput.files[0]);
-      this.navigateToTransript();
+      alert("Вы загрузили аудио");
+      console.log("Ждём реализации на фронте - 'Красивое отображение нотификаций'");
+      // this.navigateToTransript();
     })
   }
 
   loadVoice() {
     this.mediaService.mediaType = MediaType.Voice;
-    this.navigateToTransript();
+    alert("Вы выбрали запись голосом");
+    console.log("Ждём реализации на фронте - 'Красивое отображение нотификаций'");
+    // this.navigateToTransript();
+  }
+
+  uploadLink(): void {
+    alert("Временно не работает");
+    console.log("Ждём реализации на фронте - 'Загрузить видео по ссылке'");
   }
 
   setParameters(): void {

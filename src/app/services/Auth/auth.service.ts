@@ -31,11 +31,16 @@ export class ApiInterceptor implements HttpInterceptor {
       tap(
         (x) => x,
         (err) => {
-          // console.log(err);
-          // Handle this error
-          console.error(
-            `Error performing request, status code = ${err.status}`
-          );
+          if (err.status === 401) {
+            console.log("Необходимо войти");
+          } else {
+            // console.log(err);
+
+            // Handle this error
+            console.error(
+              `Error performing request, status code = ${err.status}`
+            );
+          }
         }
       )
     );

@@ -156,6 +156,12 @@ input[type="file"] {
     width: 95%;
 }
 
+.start_button {
+    margin: 10px auto -10px auto;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
 mat-option, mat-select, mat-form-field {
     // color: $accent-red !important;
     font-family: "Montserrat", sans-serif !important;
