@@ -18,14 +18,20 @@ export class MenuOptionsService {
     switch (_option) {
       case MenuOptions.Info: {
         this.titleService.setTitle('Справка');
+        alert("Временно не работает");
+        console.log("Ждём реализации на фронте - 'Справка'");
         break;
       }
       case MenuOptions.Language: {
         this.titleService.setTitle('Язык');
+        alert("Временно не работает");
+        console.log("Ждём реализации на фронте - 'Язык'");
         break;
       }
       case MenuOptions.Settings: {
         this.titleService.setTitle('Настройки');
+        alert("Временно не работает");
+        console.log("Ждём реализации на фронте - 'Настройки'");
         break;
       }
       case MenuOptions.Transcript: {

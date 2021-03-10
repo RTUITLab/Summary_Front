@@ -67,10 +67,11 @@ export class MediaService {
 
     if (this.isBigFile(blob)) {
       console.log(`file is big`);
+      alert("Временно не работает");
+      console.log("Ждём реализации - 'Настроить google cloud для загрузки с локального хоста или summaty.team домена'");
       try {
         let request = await this.http.post<any>(environment.apiUrl + `generate_upload_url?service=${this.service}`, {}).toPromise();
         if (request.success) {
-          console.log("start uploading file");
           console.log(request.url);
           let upload_request = await this.http.put<any>(request.url, blob, {
             headers: new HttpHeaders({
@@ -81,7 +82,6 @@ export class MediaService {
             console.log("Error while uploading file to google service");
             return null;
           }
-          console.log("end uploading file");
 
           let params = `transcribe_id=${request.transcribeId}&model=${this.modelOfRecognize}&`;
           if (this.diarizationEnabled) {

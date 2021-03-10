@@ -17,7 +17,11 @@
         <div class="url">
             <span>URL</span>
             <input type="text" placeholder="https://youtube.com">
-            <span class="btn btn-primary">Загрузить</span>
+            <span class="btn btn-primary" (click)="uploadLink()">Загрузить</span>
+        </div>
+
+        <div class="btn btn-primary start_button" (click)="navigateToTransript()">
+            Начать расшифровку
         </div>
 
         <div class="options">
